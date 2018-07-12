@@ -260,7 +260,9 @@ testDatabaseConnection()
 			// this callback will be called asynchronously
 			// when the response is available
 			((response.data == 'success') ? $scope.insert_test = 'Passed' : $scope.insert_test = 'FAILED');
-			        //Test 4: Test SELECT function . Should recieve "success" back.
+			
+
+			//Test 4: Test SELECT function . Should recieve "success" back. Nested here because It must execute AFETER Test 3 finishes.
 			$http({
 			method: 'POST',
 			url: 'db_interface.php',
