@@ -186,7 +186,7 @@ function testDatabaseConnection(){
 <body>
 	<h1> Spotter App Database Test Page </h1>
 	<pre class='testPre'><?php
-//testDatabaseConnection()
+testDatabaseConnection()
 	?>
 	</pre>
 
