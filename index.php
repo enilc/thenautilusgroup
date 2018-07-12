@@ -32,6 +32,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+
     <style>
       /* Set the size of the div element that contains the map */
      #map {
@@ -55,13 +57,13 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Spottr, the photo location scouting app!</h1>
+                    <h1 class="page-header">Spottr, the photo location scouting app! <span ng-app="testDatabaseInterface" ng-controller="dbInterfaceController">{{test}}</span></h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-2">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-photo fa-fw"></i> Photos in this region
@@ -83,7 +85,7 @@
                 </div>
                 <!-- /.col-lg-4 -->
 
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-map-marker fa-fw"></i>Spotted Locations
@@ -126,6 +128,11 @@
     </div>
     <!-- /#wrapper -->
 
+
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
 
@@ -162,6 +169,30 @@ function initMap() {
    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxnMU9bIct86r3W4-rJ22Sirsli0U3uH4&callback=initMap">
    </script>
 
+
+<script>
+
+    var app = angular.module('testDatabaseInterface', []);
+    app.controller('dbInterfaceController', function($scope, $http) {
+
+        $http({
+          method: 'POST',
+          url: 'db_interface.php',
+          headers: {
+            'Content-Type': 'application/json'
+            },
+          data: {test: 'testing345'}
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            $scope.test = response.data
+          }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope.test = "Error: " + response.data;
+          });
+    });
+</script>
 </body>
 
 </html>

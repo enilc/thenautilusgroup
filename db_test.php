@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<style>
+	.testPre {
+	background-color: #1C3144;
+	color: #FFFCF9; font-family: monospace;
+	font-size: 16pt;
+	padding: 5px 5px 5px 5px;
+	width: 75%;
+	}
+	</style>
+</head>
 <?php
 require 'db_connect.php';
 
@@ -167,22 +178,118 @@ function testDatabaseConnection(){
 
 }
 
+
  ?>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <body>
 	<h1> Spotter App Database Test Page </h1>
-	<pre style='background-color: #1C3144; color: #FFFCF9; font-family: monospace; font-size: 16pt; padding: 5px 5px 5px 5px; width: 75%;'><?php
-testDatabaseConnection()
+	<pre class='testPre'><?php
+//testDatabaseConnection()
 	?>
 	</pre>
 
-	<h2> Bonus AngularJS Test</h2>
-<div ng-app="">
-  <p>You will know that angularJS is working if you can type your name into the box and see it appear on the page</p>
-  <p>Name: <input type="text" ng-model="name"></p>
-  <p ng-bind="name"></p>
+	<h2> Angular/db_interface.php test</h2>
+<div ng-app="testDatabaseInterface" ng-controller="dbInterfaceController">
+  <p>db_interface.php tests</p>
+  <pre class='testPre'>
+  	Test 1 {{basic_connectivity}}: Database Interface Basic Connectivity 
+  	Test 2 {{key_test}}: Database Interaction Key Test
+  	Test 3 {{insert_test}}: SQL INSERTion test.
+  	Test 4 {{select_test}}: SQL SELECT test.
+
+  </pre>
 </div>
 
+<script>
+    var app = angular.module('testDatabaseInterface', []);
+    app.controller('dbInterfaceController', function($scope, $http) {
+    	var testString = 'C2B9264423F72EA0A78699BB9663EEA4E8647BC595B64501BDFA1429F54C4FAB';
+    	//Test 1: Test basic connection. We should get the same data back.
+        $http({
+          method: 'POST',
+          url: 'db_interface.php',
+          headers: {
+            'Content-Type': 'application/json'
+            },
+          data: {test: 'testing345'}
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            ((response.data == 'testing345') ? $scope.basic_connectivity = 'Passed' : $scope.basic_connectivity = 'FAILED');
+          }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope.basic_connectivity = "FAILED (callback)";
+          });
+
+        //Test 2: Test key test. We should get "key test passed" back
+        $http({
+          method: 'POST',
+          url: 'db_interface.php',
+          headers: {
+            'Content-Type': 'application/json'
+            },
+          data: {key: 'B52C106C63CB00C850584523FB0EC12',
+      			key_test: 'true'}
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            ((response.data == 'Key Test Passed') ? $scope.key_test = 'Passed' : $scope.key_test = 'FAILED');
+
+          }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope.key_test = "FAILED (callback)";
+          });
+
+        //Test 3: Test INSERT function . Should recieve "success" back.
+		$http({
+		method: 'POST',
+		url: 'db_interface.php',
+		headers: {
+		'Content-Type': 'application/json'
+		},
+		data: {key: 'B52C106C63CB00C850584523FB0EC12',
+				action: 'insert',
+				table: 'Location',
+				columns: ['name','latitude','longitude'],
+				values: [testString,0.0,0.0] }
+		}).then(function successCallback(response) {
+			// this callback will be called asynchronously
+			// when the response is available
+			((response.data == 'success') ? $scope.insert_test = 'Passed' : $scope.insert_test = 'FAILED');
+			        //Test 4: Test SELECT function . Should recieve "success" back.
+			$http({
+			method: 'POST',
+			url: 'db_interface.php',
+			headers: {
+			'Content-Type': 'application/json'
+			},
+			data: { key: 'B52C106C63CB00C850584523FB0EC12',
+					action: 'select',
+					table: 'Location',
+					columns: ['name','latitude','longitude'],
+					filter: {'name': testString} }
+			}).then(function successCallback(response) {
+				// this callback will be called asynchronously
+				// when the response is available
+				((response.data[0]['name'] == testString && response.data[0]['latitude'] == 0.00000000 && response.data[0]['longitude'] == 0.00000000) ? $scope.select_test= 'Passed' : $scope.select_test = 'FAILED');
+			}, function errorCallback(response) {
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				$scope.select_test = "FAILED (callback)";
+			});
+
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+			$scope.insert_test = "FAILED (callback)";
+		});
+
+
+    });
+</script>
 </body>
 </html>
