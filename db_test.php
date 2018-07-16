@@ -22,7 +22,7 @@ function testDatabaseConnection(){
 
 	$locId = 0;
 	//Test 1: Try inserting something into the Locations Table
-	$sql = "INSERT INTO spotter.Location (name, latitude,longitude) VALUES (:testString, 0.0, 0.0)";
+	$sql = "INSERT INTO spotter.Location (loc_name, latitude,longitude) VALUES (:testString, 0.0, 0.0)";
 	$stmt = $dbConn -> prepare($sql);
 	if(!$stmt -> execute(array(':testString' => $testString))){
 		echo "Test $count error: failed to insert into the databse. [spotter.locations]\n";
@@ -33,13 +33,13 @@ function testDatabaseConnection(){
 	$count += 1;
 
 	//Test 2: Check to see if our inserted Location is present.
-	$sql = "SELECT * FROM spotter.Location as l WHERE l.name = :testString";
+	$sql = "SELECT * FROM spotter.Location as l WHERE l.loc_name = :testString";
 	$stmt = $dbConn -> prepare($sql);
 	$status = $stmt -> execute(array(':testString' => $testString));
 	$locationResults = $stmt->fetchAll();
 	if(!$status){
 		echo "Test $count error: failed to select from the databse. [spotter.locations]\n";
-	} else if(strcmp($locationResults['0']['name'],$testString) != 0){
+	} else if(strcmp($locationResults['0']['loc_name'],$testString) != 0){
 		echo "_Test $count error: failed to select from the databse. [spotter.locations]\n";
 	} else {
 		echo "Test $count PASSED:   Successfully SELECTed from spotter.Location\n";
@@ -108,7 +108,7 @@ function testDatabaseConnection(){
 	$count += 1;
 
 	//Test 8: Attempt to delete our Location entry
-	$sql = "DELETE FROM spotter.Location WHERE name = :testString";
+	$sql = "DELETE FROM spotter.Location WHERE loc_name = :testString";
 	$stmt = $dbConn -> prepare($sql);
 	$status = $stmt -> execute(array(':testString' => $testString));
 
@@ -198,6 +198,10 @@ testDatabaseConnection()
   	Test 2 {{key_test}}: Database Interaction Key Test
   	Test 3 {{insert_test}}: SQL INSERTion test.
   	Test 4 {{select_test}}: SQL SELECT test.
+  	Test 5 {{injection_table_name}}: SQL Table Code Injection Attack Prevention (SELECT).
+  	Test 6 {{injection_column_name}}: SQL Column Code Injection Attack Prevention. (SELECT)
+  	Test 7 {{injection_table_name_insert}}: SQL Table Code Injection Attack Prevention (INSERT).
+  	Test 8 {{injection_column_name_insert}}: SQL Column Code Injection Attack Prevention. (INSERT)
 
   </pre>
 </div>
@@ -218,6 +222,7 @@ testDatabaseConnection()
             // this callback will be called asynchronously
             // when the response is available
             ((response.data == 'testing345') ? $scope.basic_connectivity = 'Passed' : $scope.basic_connectivity = 'FAILED');
+
           }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
@@ -238,6 +243,7 @@ testDatabaseConnection()
             // when the response is available
             ((response.data == 'Key Test Passed') ? $scope.key_test = 'Passed' : $scope.key_test = 'FAILED');
 
+
           }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
@@ -254,7 +260,7 @@ testDatabaseConnection()
 		data: {key: 'B52C106C63CB00C850584523FB0EC12',
 				action: 'insert',
 				table: 'Location',
-				columns: ['name','latitude','longitude'],
+				columns: ['loc_name','latitude','longitude'],
 				values: [testString,0.0,0.0] }
 		}).then(function successCallback(response) {
 			// this callback will be called asynchronously
@@ -262,7 +268,7 @@ testDatabaseConnection()
 			((response.data == 'success') ? $scope.insert_test = 'Passed' : $scope.insert_test = 'FAILED');
 			
 
-			//Test 4: Test SELECT function . Should recieve "success" back. Nested here because It must execute AFETER Test 3 finishes.
+			//Test 4: Test SELECT function . Should recieve "success" back. Nested here because It must execute AFTER Test 3 finishes.
 			$http({
 			method: 'POST',
 			url: 'db_interface.php',
@@ -272,12 +278,12 @@ testDatabaseConnection()
 			data: { key: 'B52C106C63CB00C850584523FB0EC12',
 					action: 'select',
 					table: 'Location',
-					columns: ['name','latitude','longitude'],
-					filter: {'name': testString} }
+					columns: ['loc_name','latitude','longitude'],
+					filter: {'loc_name': testString} }
 			}).then(function successCallback(response) {
 				// this callback will be called asynchronously
 				// when the response is available
-				((response.data[0]['name'] == testString && response.data[0]['latitude'] == 0.00000000 && response.data[0]['longitude'] == 0.00000000) ? $scope.select_test= 'Passed' : $scope.select_test = 'FAILED');
+				((response.data[0]['loc_name'] == testString && response.data[0]['latitude'] == 0.00000000 && response.data[0]['longitude'] == 0.00000000) ? $scope.select_test= 'Passed' : $scope.select_test = 'FAILED');
 			}, function errorCallback(response) {
 				// called asynchronously if an error occurs
 				// or server returns response with an error status.
@@ -290,8 +296,91 @@ testDatabaseConnection()
 			$scope.insert_test = "FAILED (callback)";
 		});
 
-
-    });
+		//Test 5: Blocking Code Injection (See the "DELETE" in table)
+		$http({
+		method: 'POST',
+		url: 'db_interface.php',
+		headers: {
+		'Content-Type': 'application/json'
+		},
+		data: { key: 'B52C106C63CB00C850584523FB0EC12',
+				action: 'select',
+				table: 'DELETE',
+				columns: ['loc_name','latitude','longitude'],
+				filter: {'loc_name': testString} }
+		}).then(function successCallback(response) {
+			// this callback will be called asynchronously
+			// when the response is available
+			((response.data == 'Invalid Table Name') ? $scope.injection_table_name= 'Passed' : $scope.injection_table_name = 'FAILED');
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+			$scope.select_test = "FAILED (callback)";
+		});
+		//Test 6: Test code injection through columns. See "DELETE" in columns.
+		$http({
+		method: 'POST',
+		url: 'db_interface.php',
+		headers: {
+		'Content-Type': 'application/json'
+		},
+		data: { key: 'B52C106C63CB00C850584523FB0EC12',
+				action: 'select',
+				table: 'Location',
+				columns: ['DELETE','latitude','longitude'],
+				filter: {'loc_name': testString} }
+		}).then(function successCallback(response) {
+			// this callback will be called asynchronously
+			// when the response is available
+			((response.data == 'Invalid Column Names') ? $scope.injection_column_name= 'Passed' : $scope.injection_column_name = 'FAILED');
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+			$scope.select_test = "FAILED (callback)";
+		});
+		//Test 7: Same as 5, only testing INSERT
+		$http({
+		method: 'POST',
+		url: 'db_interface.php',
+		headers: {
+		'Content-Type': 'application/json'
+		},
+		data: {key: 'B52C106C63CB00C850584523FB0EC12',
+				action: 'insert',
+				table: 'DELETE',
+				columns: ['loc_name','latitude','longitude'],
+				values: [testString,0.0,0.0] }
+		}).then(function successCallback(response) {
+			// this callback will be called asynchronously
+			// when the response is available
+			((response.data == 'Invalid Table Name') ? $scope.injection_table_name_insert= 'Passed' : $scope.injection_table_name_insert = 'FAILED');
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+			$scope.select_test = "FAILED (callback)";
+		});
+		//Test 8: Same as 6, only testing INSERT
+		$http({
+		method: 'POST',
+		url: 'db_interface.php',
+		headers: {
+		'Content-Type': 'application/json'
+		},
+		data: {key: 'B52C106C63CB00C850584523FB0EC12',
+				action: 'insert',
+				table: 'Location',
+				columns: ['DROP','latitude','longitude'],
+				values: [testString,0.0,0.0] }
+		}).then(function successCallback(response) {
+			// this callback will be called asynchronously
+			// when the response is available
+			((response.data == 'Invalid Column Names') ? $scope.injection_column_name_insert= 'Passed' : $scope.injection_column_name_insert = 'FAILED');
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+			$scope.select_test = "FAILED (callback)";
+		});
+});
 </script>
 </body>
 </html>
