@@ -1,18 +1,67 @@
 html,
 	body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	line-height: 1.5;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		line-height: 1.5;
+		font-size: 1em !important;
+		color: #1C2833 !important;
+		font-family: Arial !important;
 	}
  
-        /* Set the size of the div element that contains the map */
-        #map {
-         height: 500px;  /* The height is 400 pixels */
+    /* Set the size of the div element that contains the map */
+    #map 
+	{
+        height: 500px;  /* The height is 400 pixels */
         width: 100%;  /* The width is the width of the web page */
-        }
-	body {
-   	font-size: 1em !important;
-   	color: #1C2833 !important;
-   	font-family: Arial !important;
+    }
+
+	.form h2
+	{
+		background: #4D4D4D;
+		text-transform: uppercase;
+		font-family: 'Open Sans Condensed', sans-serif;
+		color: #797979;
+		font-size: 18px;
+		font-weight: 100;
+		padding: 40px;
+		margin: -30px -30px 30px -30px;
 	}
+	.form input[type="text"],
+	.form input[type="lat"],
+	.form input[type="long"],
+	.form select 
+	{
+		
+		box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		outline: none;
+		display: block;
+		width: 100%;
+		padding: 7px;
+		border: none;
+		border-bottom: 1px solid #ddd;
+		background: transparent;
+		margin-bottom: 10px;
+		font: 16px Arial, Helvetica, sans-serif;
+		height: 45px;
+	}
+	.form input[type=submit] 
+	{
+		width: 100%;
+		background-color: #4CAF50;
+		color: white;
+		padding: 14px 20px;
+		margin: 8px 0;
+		border: none;
+		border-radius: 2px;
+		cursor: pointer;
+	}
+
+	.form input[type=submit]:hover {
+		background-color: #45a049;
+	}
+
+
+</style>
