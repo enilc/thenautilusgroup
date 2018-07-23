@@ -1,9 +1,16 @@
 <?php
 function connectToDatabase(){
-    $dbhost = $_SERVER['RDS_HOSTNAME'];
-    $dbport = $_SERVER['RDS_PORT'];
-    $username = $_SERVER['RDS_USERNAME'];
-    $password = $_SERVER['RDS_PASSWORD'];
+    if(!empty($_SERVER['RDS_HOSTNAME'])){
+        $dbhost = $_SERVER['RDS_HOSTNAME'];
+        $dbport = $_SERVER['RDS_PORT'];
+        $username = $_SERVER['RDS_USERNAME']; 
+        $password = $_SERVER['RDS_PASSWORD'];  
+    } else {   
+        $dbhost = 'aaarl7tfabntmd.cvbl6vddyfbo.us-west-1.rds.amazonaws.com';   
+        $dbport = '3306';  
+        $username = 'agent';    
+        $password = 'secret';    
+    }
     $dbname = 'spotter';//$_SERVER['RDS_DB_NAME'];
     $charset = 'utf8' ;
 
