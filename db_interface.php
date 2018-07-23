@@ -23,7 +23,8 @@
     Responses are printed as JSON format objects.
     /**************************************************************************/
 
-    require('db_connect.php');
+    require_once('db_connect.php');
+    require_once('user_funct.php');
 
     //Shim to use for interaction. Credit: https://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST))
@@ -32,10 +33,23 @@
     //First test is to just see if we can connect to db_interface.php. Tells angular connection worked
     if (isset($_POST['test'])){
         echo $_POST['test'];
+    } else if(strtolower($_POST['action']) == 'userlogin') {
+        //Kill database connection for blank attempts
+        if (!(isset($_POST['email']) && isset($_POST['password']))){
+            echo '0';
+            exit(1);
+        }
+
+        if(authenticateUser($_POST['email'],$_POST['password'])){
+            echo '1';
+        } else {
+            echo '0';
+        }
+    }
     //This test makes sure that the 'key' can be used to access the page. Better than nothing, but not much.
-    } else if ($_POST['key'] == 'B52C106C63CB00C850584523FB0EC12'){
+    else if ($_POST['key'] == 'B52C106C63CB00C850584523FB0EC12') { 
         //This tests to see if POSTS are being correctly sent to db_interface.php
-        if(isset($_POST['key_test']) && $_POST['key_test'] == 'true'){
+        if(strtolower($_POST['action']) === "key_test"){
             echo 'Key Test Passed';
         //This allows SQL inserts
         } else if(strtolower($_POST['action']) == 'insert'){
@@ -195,6 +209,7 @@
                 echo $Exception->getMessage();
             }
         }
+
     }
 
 

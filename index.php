@@ -1,5 +1,24 @@
+<?php 
+
+    require_once('user_funct.php');
+
+    //We check to see if we have a passed session id
+    if(isset($_GET['sid'])){
+        //We make sure the session exists.
+        $passedSID = session_id($_GET['sid']);
+        session_start();
+    } 
+    //Pickup sessions without a GET SID.
+    if(!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) { //We don't have a session to use
+        header('Location: login.php');
+    } 
+    
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
+
 
 <head>
 
@@ -51,13 +70,13 @@
 
         <?php 
         //Allows ud to edit the navigation bar one time for all website pages.
-        require('includes/nav_bar.php') 
+        require_once('includes/nav_bar.php') 
         ?>
 
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Spottr, the photo location scouting app! <span ng-app="testDatabaseInterface" ng-controller="dbInterfaceController">{{test}}</span></h1>
+                    <h1 class="page-header">Spottr, the photo location scouting app! </h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -111,6 +130,7 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
+
                             <div id="map"></div>
                         </div>
                         <!-- /.panel-body -->
@@ -172,26 +192,7 @@ function initMap() {
 
 <script>
 
-    var app = angular.module('testDatabaseInterface', []);
-    app.controller('dbInterfaceController', function($scope, $http) {
 
-        $http({
-          method: 'POST',
-          url: 'db_interface.php',
-          headers: {
-            'Content-Type': 'application/json'
-            },
-          data: {test: 'testing345'}
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            $scope.test = response.data
-          }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-            $scope.test = "Error: " + response.data;
-          });
-    });
 </script>
 </body>
 
