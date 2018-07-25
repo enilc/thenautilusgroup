@@ -12,10 +12,12 @@ function connectToDatabase(){
         $password = 'secret';    
     }
     $dbname = 'spotter';//$_SERVER['RDS_DB_NAME'];
-    $charset = 'utf8' ;
+    $charset = 'utf8';
 
+	
     $dsn = "mysql:host={$dbhost};port={$dbport};dbname={$dbname};charset={$charset}";
 
+	
     return new PDO($dsn, $username, $password);
 
 }

@@ -12,12 +12,11 @@
     if(!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) { //We don't have a session to use
         header('Location: login.php');
     } 
-    
+ 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 
 
 <head>
