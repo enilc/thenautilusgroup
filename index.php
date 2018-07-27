@@ -166,17 +166,18 @@
     <script src="dist/js/sb-admin-2.js"></script>
 
        <script>
+
 // Initialize and add the map
 function initMap() {
  // The location of Uluru used Nicaragua but we can change
- var uluru = {lat: 12.112949, lng: -86.281262};
+ var {{map_location}} = {lat: {{map_latitude}, lng: {{map_longitude}}};
  // The map, centered at Uluru
  console.log('got here');
  var map = new google.maps.Map(
 
-     document.getElementById('map'), {zoom: 4, center: uluru});
+     document.getElementById('map'), {zoom: 4, center: {{map_location}}});
  // The marker, positioned at Uluru
- var marker = new google.maps.Marker({position: uluru, map: map});
+ var marker = new google.maps.Marker({position: {{map_location}}, map: map});
 }
    </script>
    <!--Load the API from the specified URL
