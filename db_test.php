@@ -364,6 +364,7 @@ Test 5 {{injection_table_name}}: SQL Table Code Injection Attack Prevention (SEL
 Test 6 {{injection_column_name}}: SQL Column Code Injection Attack Prevention. (SELECT)
 Test 7 {{injection_table_name_insert}}: SQL Table Code Injection Attack Prevention (INSERT).
 Test 8 {{injection_column_name_insert}}: SQL Column Code Injection Attack Prevention. (INSERT)
+Test 9 {{cleanup}}: db cleanup
 
 							</pre>
                         </div>
@@ -498,6 +499,26 @@ Test 8 {{injection_column_name_insert}}: SQL Column Code Injection Attack Preven
 				// this callback will be called asynchronously
 				// when the response is available
 				((response.data[0]['loc_name'] == testString && response.data[0]['latitude'] == 0.00000000 && response.data[0]['longitude'] == 0.00000000) ? $scope.select_test= 'Passed' : $scope.select_test = 'FAILED');
+					//Test 9: cleaning up after ourselves.
+						$http({
+							method: 'POST',
+							url: 'db_interface.php',
+							headers: {
+							'Content-Type': 'application/json'
+							},
+							data: {key: 'B52C106C63CB00C850584523FB0EC12',
+									action: 'clean_test',
+									filter: testString }
+							}).then(function successCallback(response) {
+								// this callback will be called asynchronously
+								// when the response is available
+								((response.data == 'success') ? $scope.cleanup = 'Passed' : $scope.cleanup = 'FAILED');
+
+							}, function errorCallback(response) {
+								// called asynchronously if an error occurs
+								// or server returns response with an error status.
+								$scope.cleanup = "FAILED (callback)";
+							});
 			}, function errorCallback(response) {
 				// called asynchronously if an error occurs
 				// or server returns response with an error status.
@@ -594,6 +615,10 @@ Test 8 {{injection_column_name_insert}}: SQL Column Code Injection Attack Preven
 			// or server returns response with an error status.
 			$scope.select_test = "FAILED (callback)";
 		});
+
+
+
+
 });
 </script>
 

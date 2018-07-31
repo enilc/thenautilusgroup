@@ -208,6 +208,15 @@
             catch (PDOException $Exception) {
                 echo $Exception->getMessage();
             }
+        } else if (strtolower($_POST['action']) == 'clean_test'){
+            $dbConn = connectToDatabase();
+            $sql = "DELETE FROM spotter.Location WHERE loc_name = :testString";
+            $stmt = $dbConn -> prepare($sql);
+            if(!$stmt -> execute(array(':testString' => $_POST['filter']))){
+                echo 'FAILURE of Cleanup';
+            } else {
+                echo 'success';
+            }
         }
 
     }
