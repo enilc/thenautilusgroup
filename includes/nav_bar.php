@@ -7,7 +7,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">spot.tr</a>
+                <a class="navbar-brand" href="index.php">spot.tr</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -53,7 +53,6 @@
                         <li>
                             <a href=<?php echo "\"db_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Database</a>
                         </li>
-
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

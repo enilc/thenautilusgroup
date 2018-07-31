@@ -1,7 +1,5 @@
 <?php 
-
     require_once('user_funct.php');
-
     //We check to see if we have a passed session id
     if(isset($_GET['sid'])){
         //We make sure the session exists.
@@ -13,6 +11,12 @@
         header('Location: login.php');
     } 
  
+
+?>
+    
+<?php 
+require_once('db_connect.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +24,8 @@
 
 
 <head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,7 +33,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>DB Interface Test</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -51,19 +57,58 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-
+   <script src="http://maps.google.com/maps/api/js?key=AIzaSyAxnMU9bIct86r3W4-rJ22Sirsli0U3uH4&sensor=false" 
+          type="text/javascript">
+   </script>
+	
     <style>
       /* Set the size of the div element that contains the map */
      #map {
        height: 600px;  /* The height is 400 pixels */
        width: 100%;  /* The width is the width of the web page */
       }
-
     </style>
 
 </head>
 
 <body>
+
+<script>
+    var LOCATIONS;
+
+    var app = angular.module('testDatabaseInterface', []);
+    app.controller('dbInterfaceController', function($scope, $http) {
+
+    	var testString = 'C2B9264423F72EA0A78699BB9663EEA4E8647BC595B64501BDFA1429F54C4FAB';
+			
+			//Pulls loc_name, latitude, and longitude from our DB
+			$http({
+			method: 'POST',
+			url: 'db_interface.php',
+			headers: {
+			'Content-Type': 'application/json'
+			},
+			data: { key: 'B52C106C63CB00C850584523FB0EC12',
+					action: 'select',
+					table: 'Location',
+					columns: ['loc_name','latitude','longitude']}
+			}).then(function successCallback(response) {
+				// this callback will be called asynchronously
+				// when the response is available
+				$scope.index = response.data.length;
+				$scope.map_location = response.data[0]['loc_name'];
+				$scope.map_latitude = response.data[0]['latitude'];
+				$scope.map_longitude = response.data[0]['longitude'];
+                LOCATIONS = response.data;
+                addMapMarkers(response.data);
+                console.log(LOCATIONS);
+			}, function errorCallback(response) {
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				$scope.select_test = "FAILED (callback)";
+			});
+		});
+</script>
 
     <div id="wrapper">
 
@@ -93,6 +138,10 @@
                                 <img src="images/03.jpg" class="img-thumbnail" alt="Image1">
                                 <img src="images/04.jpg" class="img-thumbnail" alt="Image1">
                                 <img src="images/05.jpg" class="img-thumbnail" alt="Image1">
+<div class='testPre' ng-app="testDatabaseInterface" ng-controller="dbInterfaceController">
+
+
+</div>
 
                             <a href="#" class="btn btn-default btn-block">View All Alerts</a>
                         </div>
@@ -149,7 +198,7 @@
 
 
 
-    <!-- jQuery -->
+    <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
 
     <!-- jQuery -->
@@ -165,34 +214,52 @@
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
 
-       <script>
-// Initialize and add the map
-function initMap() {
- // The location of Uluru used Nicaragua but we can change
- var uluru = {lat: 12.112949, lng: -86.281262};
- // The map, centered at Uluru
- console.log('got here');
- var map = new google.maps.Map(
+	
+<script type="text/javascript">
+function addMapMarkers(locations){
 
-     document.getElementById('map'), {zoom: 4, center: uluru});
- // The marker, positioned at Uluru
- var marker = new google.maps.Marker({position: uluru, map: map});
+    console.log(locations)
+    var avgLat = 0;
+    var avgLong = 0;
+    for (i = 0; i < locations.length; i++){
+        avgLat += parseFloat(locations[i]['latitude']);
+        avgLong += parseFloat(locations[i]['longitude']);
+    }
+
+    avgLat = avgLat/locations.length;
+    avgLong = avgLong/locations.length;
+    console.log(avgLat);
+    console.log(avgLong);
+
+    var map = new google.maps.Map(
+        //document.getElementById('map'), {zoom: 10, center: new google.maps.LatLng(37.5949, -120.9577)});
+        document.getElementById('map'), {zoom: 10, center: new google.maps.LatLng(avgLat, avgLong)});
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(parseFloat(locations[i]['latitude']), parseFloat(locations[i]['longitude'])),
+            map: map
+            });
+
+        var infowindow = new google.maps.InfoWindow({
+              content: 'test info'
+            });
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infowindow.setContent(locations[i][0]);
+                infowindow.open(map, marker);
+                }
+            })(marker, i));
+    }
 }
-   </script>
-   <!--Load the API from the specified URL
-   * The async attribute allows the browser to render the page while the API loads
-   * The key parameter will contain your own API key (which is not needed for this tutorial) I setup a key in geocoding api
-   * The callback parameter executes the initMap() function
-   -->
-   <script async defer
-   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxnMU9bIct86r3W4-rJ22Sirsli0U3uH4&callback=initMap">
-   </script>
-
-
-<script>
-
-
+   
 </script>
+
+
+
 </body>
 
 </html>
