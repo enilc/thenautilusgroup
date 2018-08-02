@@ -72,6 +72,8 @@ require_once('db_connect.php');
 
 <body>
 
+<!-- THIS WOULD SERVE AS THE BUSINESS OBJECT AS IT FILLS THE TRANSFER OBJECT WITH DATA FROM THE DATABASE -->
+<!-- BUSINESS OBJECT STARTS HERE -->
 <script>
     var LOCATIONS;
 
@@ -108,6 +110,7 @@ require_once('db_connect.php');
 			});
 		});
 </script>
+<!-- BUSINESS OBJECT ENDS HERE -->
 
     <div id="wrapper">
 
@@ -178,8 +181,12 @@ require_once('db_connect.php');
                         <!-- /.panel-heading -->
                         <div class="panel-body">
 
+<!-- THIS WOULD SERVE AS THE CLIENT AS IT DISPLAYS THE OUTPUT FROM BOTH THE BUSINESS OBJECT AND TRANSFER OBJECT COMBINED -->
+<!-- CLIENT STARTS HERE -->
                             <div id="map"></div>
-                        </div>
+<!-- CLIENT ENDS HERE -->
+						
+						</div>
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
@@ -213,7 +220,8 @@ require_once('db_connect.php');
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
 
-	
+<!-- THIS WOULD SERVE AS THE TRANSFER OBJECT AS THIS PULLS IN THE DATA FROM THE BUSINESS OBJECT TO INTERACT WITH IT -->
+<!-- TRANSFER OBJECT STARTS HERE -->
 <script type="text/javascript">
 function addMapMarkers(locations){
 
@@ -256,7 +264,7 @@ function addMapMarkers(locations){
 }
    
 </script>
-
+<!-- TRANSFER OBJECT ENDS HERE -->
 
 
 </body>
