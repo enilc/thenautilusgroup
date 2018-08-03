@@ -23,8 +23,13 @@ require_once('db_connect.php');
 
 
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<!-- primary spot.tr javascript file. -->
+
+<script src="spottr.js"></script>
+
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -70,45 +75,12 @@ require_once('db_connect.php');
 
 </head>
 
-<body>
+<body ng-app="spottr" ng-controller="spottrCntrl">
 
 <!-- THIS WOULD SERVE AS THE BUSINESS OBJECT AS IT FILLS THE TRANSFER OBJECT WITH DATA FROM THE DATABASE -->
 <!-- BUSINESS OBJECT STARTS HERE -->
 <script>
-    var LOCATIONS;
 
-    var app = angular.module('testDatabaseInterface', []);
-    app.controller('dbInterfaceController', function($scope, $http) {
-
-    	var testString = 'C2B9264423F72EA0A78699BB9663EEA4E8647BC595B64501BDFA1429F54C4FAB';
-			
-			//Pulls loc_name, latitude, and longitude from our DB
-			$http({
-			method: 'POST',
-			url: 'db_interface.php',
-			headers: {
-			'Content-Type': 'application/json'
-			},
-			data: { key: 'B52C106C63CB00C850584523FB0EC12',
-					action: 'select',
-					table: 'Location',
-					columns: ['loc_name','latitude','longitude']}
-			}).then(function successCallback(response) {
-				// this callback will be called asynchronously
-				// when the response is available
-				$scope.index = response.data.length;
-				$scope.map_location = response.data[0]['loc_name'];
-				$scope.map_latitude = response.data[0]['latitude'];
-				$scope.map_longitude = response.data[0]['longitude'];
-                LOCATIONS = response.data;
-                addMapMarkers(response.data);
-                console.log(LOCATIONS);
-			}, function errorCallback(response) {
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
-				$scope.select_test = "FAILED (callback)";
-			});
-		});
 </script>
 <!-- BUSINESS OBJECT ENDS HERE -->
 
@@ -122,7 +94,7 @@ require_once('db_connect.php');
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Spottr, the photo location scouting app! </h1>
+                    <br />
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -135,15 +107,12 @@ require_once('db_connect.php');
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                                <img src="images/01.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/02.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/03.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/04.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/05.jpg" class="img-thumbnail" alt="Image1">
-<div class='testPre' ng-app="testDatabaseInterface" ng-controller="dbInterfaceController">
 
-
-</div>
+                                <img src="{{picturePaths[0]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[1]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[2]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[3]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[4]}}" class="img-thumbnail" alt="Image1">
 
                             <a href="#" class="btn btn-default btn-block">View All Alerts</a>
                         </div>
@@ -184,9 +153,12 @@ require_once('db_connect.php');
 <!-- THIS WOULD SERVE AS THE CLIENT AS IT DISPLAYS THE OUTPUT FROM BOTH THE BUSINESS OBJECT AND TRANSFER OBJECT COMBINED -->
 <!-- CLIENT STARTS HERE -->
                             <div id="map"></div>
-<!-- CLIENT ENDS HERE -->
-						
-						</div>
+                            <hr>
+                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">
+                              Add New Location
+                            </button>
+                        </div>
+
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
@@ -201,6 +173,50 @@ require_once('db_connect.php');
 
     </div>
     <!-- /#wrapper -->
+
+
+    <!-- New Location Modal -->
+    <div class="modal fade" id="newLocationModal" tabindex="-1" role="dialog" aria-labelledby="newLocLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title d-inline" id="newLocLabel">Add spot to spot.tr!
+
+            <button type="button" id="locModalCloseBtn" class="close d-inline" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </h2>
+
+          </div>
+          <div class="modal-body">
+              <form>
+                <div class="form-group row">
+                  <label for="lgLocationName" class="col-sm-2 col-form-label col-form-label-lg">Location</label>
+                  <div class="col-sm-10">
+                    <input type="text" ng-model="locFormName" class="form-control form-control-lg" id="lgLocationName" placeholder="Taj Mahal">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="lgLocationLat" class="col-sm-2 col-form-label col-form-label-lg">Latitude</label>
+                  <div class="col-sm-10">
+                    <input type="number" ng-model="locFormLat" class="form-control form-control-lg" id="lgLocationLat" placeholder="37.63968970">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="lgLocationLong" class="col-sm-2 col-form-label col-form-label-lg">Longitude</label>
+                  <div class="col-sm-10">
+                    <input type="number" ng-model="locFormLong" class="form-control form-control-lg" id="lgLocationLong" placeholder="-120.99970480">
+                  </div>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="locSave" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order" class="btn btn-primary">Add Location</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
@@ -223,46 +239,8 @@ require_once('db_connect.php');
 <!-- THIS WOULD SERVE AS THE TRANSFER OBJECT AS THIS PULLS IN THE DATA FROM THE BUSINESS OBJECT TO INTERACT WITH IT -->
 <!-- TRANSFER OBJECT STARTS HERE -->
 <script type="text/javascript">
-function addMapMarkers(locations){
 
-    console.log(locations)
-    var avgLat = 0;
-    var avgLong = 0;
-    for (i = 0; i < locations.length; i++){
-        avgLat += parseFloat(locations[i]['latitude']);
-        avgLong += parseFloat(locations[i]['longitude']);
-    }
-
-    avgLat = avgLat/locations.length;
-    avgLong = avgLong/locations.length;
-    console.log(avgLat);
-    console.log(avgLong);
-
-    var map = new google.maps.Map(
-        //document.getElementById('map'), {zoom: 10, center: new google.maps.LatLng(37.5949, -120.9577)});
-        document.getElementById('map'), {zoom: 10, center: new google.maps.LatLng(avgLat, avgLong)});
-
-    var marker, i;
-
-    for (i = 0; i < locations.length; i++) {  
-
-        marker = new google.maps.Marker({
-            position: new google.maps.LatLng(parseFloat(locations[i]['latitude']), parseFloat(locations[i]['longitude'])),
-            map: map
-            });
-
-        var infowindow = new google.maps.InfoWindow({
-              content: 'test info'
-            });
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-                infowindow.setContent(locations[i][0]);
-                infowindow.open(map, marker);
-                }
-            })(marker, i));
-    }
-}
-   
+spottrInit();
 </script>
 <!-- TRANSFER OBJECT ENDS HERE -->
 

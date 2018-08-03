@@ -21,117 +21,50 @@
         )
 
     Responses are printed as JSON format objects.
+
+    **************************************************************************
+
+    Mediator Object:
+
+    To interface with the MySQL database I've (Caleb Allen) used the Mediator
+    design pattern.
+
+    ___________________         _____________________         _________________
+    | Javascript POST |         | Mediator Class    |         | MySQL Database|
+    | to              | <-----> |-------------------| <-----> |---------------|
+    | db_interface.php|         | dbTestCleanup()   |         | User Data     |
+    |                 |         | dbSelect()        |         | Location Data |
+    -------------------         | dbInsert()        |         | Picture Data  |
+                                | userLogin()       |         -----------------
+                                | conTestHandler()  |
+                                | getColumnNames()  |
+                                | getTableNames()   |  
+                                ---------------------
     /**************************************************************************/
 
     require_once('db_connect.php');
     require_once('user_funct.php');
 
-    //Shim to use for interaction. Credit: https://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
-    if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST))
-        $_POST = json_decode(file_get_contents('php://input'), true);
-
-    //First test is to just see if we can connect to db_interface.php. Tells angular connection worked
-    if (isset($_POST['test'])){
-        echo $_POST['test'];
-    } else if(strtolower($_POST['action']) == 'userlogin') {
-        //Kill database connection for blank attempts
-        if (!(isset($_POST['email']) && isset($_POST['password']))){
-            echo '0';
-            exit(1);
-        }
-
-        if(authenticateUser($_POST['email'],$_POST['password'])){
-            echo '1';
-        } else {
-            echo '0';
-        }
-    }
-    //This test makes sure that the 'key' can be used to access the page. Better than nothing, but not much.
-    else if ($_POST['key'] == 'B52C106C63CB00C850584523FB0EC12') { 
-        //This tests to see if POSTS are being correctly sent to db_interface.php
-        if(strtolower($_POST['action']) === "key_test"){
-            echo 'Key Test Passed';
-        //This allows SQL inserts
-        } else if(strtolower($_POST['action']) == 'insert'){
-            //Data being added to our database. Will be used for PDO execute()
-            $queryDetails = array();
-
-            //Connect to SQL database.
+    class Mediator {
+        //Function for deleting locations added during testing
+        function dbTestCleanup($filter){
             $dbConn = connectToDatabase();
-
-            //Check our posted table against the tables present within spotter.
-            if (!in_array($_POST['table'],getTableNames('spotter'))){
-                echo 'Invalid Table Name';
-                exit(1);
-            }
-
-            //Since we know $_POST['table'] is safe, add directlyt to query string.
-            $sql = 'INSERT INTO spotter.`' . $_POST['table'] . '` (';
-
-            //formatting flag
-            $first = true;
-
-            //get a list of column names for the table we're inserting into
-            $colNames = getColumnNames($_POST['table']);
-            foreach($_POST['columns'] as $col){
-                //Abort if any column is not a direct match to what getColumnNames() found.
-                if (!in_array($col,$colNames)){
-                    echo 'Invalid Column Names';
-                    exit(1);
-                }
-
-                //Since we know $col is safe, add directly to the query string.
-                $sql .= (!$first ? ', ': '') . $col;
-                $first = false;
-            }
-
-            $sql .= ') VALUES (';
-
-            //Formatting flag
-            $first = true;
-
-            //Column name counter
-            $count = 0;
-            foreach($_POST['values'] as $val){
-
-                //Add placemarkers to SQL String
-                $sql .= (!$first ? ', ': '') . ':val' . $count;
-
-                //Add values for later translation by PDO execute()
-                $queryDetails[':val' . $count] = $val;
-
-                //Formatting trackers
-                $first = false;
-                $count += 1;
-            }
-            $sql .= ')';
-
-
-            //Prepare our statement
+            $sql = "DELETE FROM spotter.Location WHERE loc_name = :testString";
             $stmt = $dbConn -> prepare($sql);
-
-            //In try block incase something goes wrong.
-            try {
-                //Execute query with column names processed by PDO
-                $status = $stmt->execute($queryDetails);
-                if($status){
-                    echo "success";
-                } else {
-                    echo "failure: " . $sql;
-                }
-            }
-            catch (PDOException $Exception) {
-                echo $Exception->getMessage();
+            if(!$stmt -> execute(array(':testString' => $filter))){
+                echo 'FAILURE of Cleanup';
+            } else {
+                echo 'success';
             }
         }
 
-        //This will select items from the database.
-        else if(strtolower($_POST['action']) == 'select'){
+        //Function for selecting data from the database
+        function dbSelect($table,$columns,$filter){
             //Connect to SQL database.
             $dbConn = connectToDatabase();
 
             //Check our posted table against the tables present within spotter.
-            if (!in_array($_POST['table'],getTableNames('spotter'))){
+            if (!in_array($table,$this -> getTableNames('spotter'))){
                 echo 'Invalid Table Name';
                 exit(1);
             }
@@ -146,10 +79,10 @@
             $first = true;
 
             //Get list of valid columns from our table.
-            $columns = getColumnNames($_POST['table']);
-            foreach($_POST['columns'] as $col){
+            $validColumns = $this -> getColumnNames($table);
+            foreach($columns as $col){
                 //Check to make sure our POSTed column name is valid
-                if(!in_array($col, $columns)){
+                if(!in_array($col, $validColumns)){
                     echo "Invalid Column Names";
                     exit(1);
                 }
@@ -162,10 +95,10 @@
             }
 
             //Since we know our POSTed table name is valid, add directly to sql string.
-            $sql .= ' FROM spotter.`' . $_POST['table'] . '`';
+            $sql .= ' FROM spotter.`' . $table . '`';
 
             //Add filters if present.
-            if(isset($_POST['filter'])){
+            if(!is_null($filter)){
                 //Add our filter condition to the sql query
                 $sql .= ' WHERE ';
 
@@ -173,7 +106,7 @@
                 $filterFirst = true;
                 $count = 0;
 
-                foreach($_POST['filter'] as $key => $value){
+                foreach($filter as $key => $value){
                     //Check to make sure our POSTed column name is valid.
                     if(!in_array($key,$columns)){
                         echo 'invalid filter key';
@@ -208,33 +141,160 @@
             catch (PDOException $Exception) {
                 echo $Exception->getMessage();
             }
-        } else if (strtolower($_POST['action']) == 'clean_test'){
+        }
+
+        //Function for Inserting data into the database
+        function dbInsert($table, $columns, $values){
+            //Data being added to our database. Will be used for PDO execute()
+            $queryDetails = array();
+
+            //Connect to SQL database.
             $dbConn = connectToDatabase();
-            $sql = "DELETE FROM spotter.Location WHERE loc_name = :testString";
+
+            //Check our posted table against the tables present within spotter.
+            if (!in_array($table,$this -> getTableNames('spotter'))){
+                echo 'Invalid Table Name';
+                exit(1);
+            }
+
+            //Since we know $table is safe, add directlyt to query string.
+            $sql = 'INSERT INTO spotter.`' . $table . '` (';
+
+            //formatting flag
+            $first = true;
+
+            //get a list of column names for the table we're inserting into
+            $colNames = $this -> getColumnNames($table);
+            foreach($columns as $col){
+                //Abort if any column is not a direct match to what $this -> getColumnNames() found.
+                if (!in_array($col,$colNames)){
+                    echo 'Invalid Column Names';
+                    exit(1);
+                }
+
+                //Since we know $col is safe, add directly to the query string.
+                $sql .= (!$first ? ', ': '') . $col;
+                $first = false;
+            }
+
+            $sql .= ') VALUES (';
+
+            //Formatting flag
+            $first = true;
+
+            //Column name counter
+            $count = 0;
+            foreach($values as $val){
+
+                //Add placemarkers to SQL String
+                $sql .= (!$first ? ', ': '') . ':val' . $count;
+
+                //Add values for later translation by PDO execute()
+                $queryDetails[':val' . $count] = $val;
+
+                //Formatting trackers
+                $first = false;
+                $count += 1;
+            }
+            $sql .= ')';
+
+
+            //Prepare our statement
             $stmt = $dbConn -> prepare($sql);
-            if(!$stmt -> execute(array(':testString' => $_POST['filter']))){
-                echo 'FAILURE of Cleanup';
-            } else {
-                echo 'success';
+
+            //In try block incase something goes wrong.
+            try {
+                //Execute query with column names processed by PDO
+                $status = $stmt->execute($queryDetails);
+                if($status){
+                    echo "success";
+                } else {
+                    echo "failure: " . $sql;
+                }
+            }
+            catch (PDOException $Exception) {
+                echo $Exception->getMessage();
             }
         }
 
+        //Handle User Login/Authentication
+        function userLogin($username,$password){
+            if(authenticateUser($username,$password)){
+                echo '1';
+            } else {
+                echo '0';
+            }
+        }
+
+        //Echo back received data during connection testing
+        function conTestHandler($data){
+            echo $data;
+        }
+
+        //List valid column names for a specific table
+        function getColumnNames($table){
+            //Credit: https://stackoverflow.com/questions/5428262/php-pdo-get-the-columns-name-of-a-table
+            $dbConn = connectToDatabase();
+            $stmt = $dbConn->prepare('DESCRIBE spotter.`' . $table . '`');
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_COLUMN);
+        }
+
+        //List validTableNames for a specific database.
+        function getTableNames($db){
+            //Credit: https://stackoverflow.com/questions/5428262/php-pdo-get-the-columns-name-of-a-table
+            $dbConn = connectToDatabase();
+            $stmt = $dbConn->prepare('SELECT table_name FROM information_schema.tables WHERE table_schema=:db;');
+            $stmt->execute(array(':db' => $db));
+            return $stmt->fetchAll(PDO::FETCH_COLUMN);
+        }
     }
 
 
-function getColumnNames($table){
-    //Credit: https://stackoverflow.com/questions/5428262/php-pdo-get-the-columns-name-of-a-table
-    $dbConn = connectToDatabase();
-    $stmt = $dbConn->prepare('DESCRIBE spotter.`' . $table . '`');
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+function postInterface($dbMed){
+    //Shim to use for interaction. Credit: https://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST))
+        $_POST = json_decode(file_get_contents('php://input'), true);
+
+    //First test is to just see if we can connect to db_interface.php. Tells angular connection worked
+    if (isset($_POST['test'])){
+        $dbMed -> conTestHandler($_POST['test']);
+    } else if(strtolower($_POST['action']) == 'userlogin') {
+        //Kill database connection for blank attempts
+        if (!(isset($_POST['email']) && isset($_POST['password']))){
+            echo '0';
+            exit(1);
+        }
+
+        //authenticate user
+        $dbMed -> userLogin($_POST['email'],$_POST['password']);
+    }
+    //This test makes sure that the 'key' can be used to access the page. Better than nothing, but not much.
+    else if ($_POST['key'] == 'B52C106C63CB00C850584523FB0EC12') { 
+
+        switch (strtolower($_POST['action'])){
+            case 'key_test':
+                echo 'Key Test Passed';
+                break;
+            case 'insert':
+                $dbMed -> dbInsert($_POST['table'], $_POST['columns'], $_POST['values']);
+                break;
+            case 'select':
+                $dbMed -> dbSelect($_POST['table'],$_POST['columns'],(isset($_POST['filter']) ? $_POST['filter'] : NULL));
+                break;
+            case 'clean_test':
+                $dbMed -> dbTestCleanup($_POST['filter']);
+                break;
+            default:
+                break;
+        }
+
+    }
 }
-function getTableNames($db){
-    //Credit: https://stackoverflow.com/questions/5428262/php-pdo-get-the-columns-name-of-a-table
-    $dbConn = connectToDatabase();
-    $stmt = $dbConn->prepare('SELECT table_name FROM information_schema.tables WHERE table_schema=:db;');
-    $stmt->execute(array(':db' => $db));
-    return $stmt->fetchAll(PDO::FETCH_COLUMN);
-}
+
+
+$dbInterfaceMediator = new Mediator;
+postInterface($dbInterfaceMediator);
 
 ?>

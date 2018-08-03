@@ -1,13 +1,7 @@
 <?php
 
 require_once('db_connect.php');
-/*
-function manageUserSession(){
-	if(isset($_COOKIE['spotter_session'])) { //We have a session ID stored as a cookie.
-        if()
-    }
-}
-*/
+
 function authenticateUser($email, $password){
 	//Connect to SQL database.
 	$dbConn = connectToDatabase();
@@ -29,4 +23,8 @@ function authenticateUser($email, $password){
 	
 }
 
+//Credit: https://www.xeweb.net/2011/02/11/generate-a-random-string-a-z-0-9-in-php/
+function generateRandomString($length = 10) {
+	return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length);
+}
 ?>

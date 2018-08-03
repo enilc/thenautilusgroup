@@ -53,6 +53,9 @@
                         <li>
                             <a href=<?php echo "\"db_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Database</a>
                         </li>
+                        <li>
+                            <a href=<?php echo "\"mediator_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Mediator Pattern</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
