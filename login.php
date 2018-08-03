@@ -135,6 +135,7 @@
                     $scope.pClass = "form-group has-error has-feedback";
                     $scope.loginBtn = "btn btn-lg btn-danger btn-block";
                     $scope.btnMessage = "Retry";
+                    console.log(response.data);
                 }
               }, function errorCallback(response) {
                 // called asynchronously if an error occurs
