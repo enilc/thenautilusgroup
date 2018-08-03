@@ -91,7 +91,7 @@ require_once('db_connect.php');
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Spottr, the photo location scouting app! </h1>
+                    <br />
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -148,6 +148,10 @@ require_once('db_connect.php');
                         <div class="panel-body">
 
                             <div id="map"></div>
+                            <hr>
+                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">
+                              Add New Location
+                            </button>
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -163,6 +167,50 @@ require_once('db_connect.php');
 
     </div>
     <!-- /#wrapper -->
+
+
+    <!-- New Location Modal -->
+    <div class="modal fade" id="newLocationModal" tabindex="-1" role="dialog" aria-labelledby="newLocLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title d-inline" id="newLocLabel">Add spot to spot.tr!
+
+            <button type="button" id="locModalCloseBtn" class="close d-inline" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </h2>
+
+          </div>
+          <div class="modal-body">
+              <form>
+                <div class="form-group row">
+                  <label for="lgLocationName" class="col-sm-2 col-form-label col-form-label-lg">Location</label>
+                  <div class="col-sm-10">
+                    <input type="text" ng-model="locFormName" class="form-control form-control-lg" id="lgLocationName" placeholder="Taj Mahal">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="lgLocationLat" class="col-sm-2 col-form-label col-form-label-lg">Latitude</label>
+                  <div class="col-sm-10">
+                    <input type="number" ng-model="locFormLat" class="form-control form-control-lg" id="lgLocationLat" placeholder="37.63968970">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="lgLocationLong" class="col-sm-2 col-form-label col-form-label-lg">Longitude</label>
+                  <div class="col-sm-10">
+                    <input type="number" ng-model="locFormLong" class="form-control form-control-lg" id="lgLocationLong" placeholder="-120.99970480">
+                  </div>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="locSave" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order" class="btn btn-primary">Add Location</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 

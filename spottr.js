@@ -22,6 +22,17 @@ app.controller('spottrCntrl', function($scope, $http) {
 */
 		$scope.picturePaths = [];
 
+		/***************TODO************************
+			This section is supposed to be able to
+			tell what markers are on the google
+			maps api.
+
+			Current iteration, naively, grabs all
+			locations and adds to map. This is
+			probably okay, but we would then need
+			to know what locations are showing up
+			because we want to populate the thumbs.
+		/***********END TODO************************/
 		//Pulls loc_name, latitude, and longitude from our DB
 		$http({
 		method: 'POST',
@@ -67,6 +78,38 @@ app.controller('spottrCntrl', function($scope, $http) {
 			$scope.select_test = "FAILED (callback)";
 		});
 	});
+
+$('document').ready(function () {
+	$('#locSave').on('click', function() {
+		if($('#lgLocationName').val() !== "" && $('#lgLocationLat').val() !== "" && $('#lgLocationLong').val() !== ""){
+			var $this = $(this);
+			$this.button('loading');
+			/*	    setTimeout(function() {
+			$this.button('reset');
+			}, 8000);*/
+			$.ajax({
+				url: "db_interface.php",
+				type: "post",
+				data: {
+					key: 'B52C106C63CB00C850584523FB0EC12',
+					action: 'insert',
+					table: 'Location',
+					columns: ['loc_name','latitude', 'longitude'],
+					values: [$('#lgLocationName').val(),$('#lgLocationLat').val(),$('#lgLocationLong').val()]
+				},
+				dataType: "text",
+				success: function(response) {
+					console.log(response);
+					$('#locSave').button('reset');
+					$('#newLocationModal').modal('toggle');
+					location.reload();
+				}
+			});
+		}
+	});
+});
+
+
 
 
 function addMapMarkers(locations){
