@@ -11,6 +11,17 @@ Note (8/2/18)
 var app = angular.module('spottr', []);
 app.controller('spottrCntrl', function($scope, $http) {
 
+/*		$scope.picturePaths = [ 'images/1_Kcyrph52FHbnAi.jpg',
+								'images/1_oEnsftm9GDpRb8.jpg',
+								'images/495_3Di0GtaupvrV4S.jpg',
+								'images/495_9qIzOYHsSd3r5Q.jpg',
+								'images/495_pj9ES8dtJAxNmc.jpg',
+								'images/496_gD0V23PakLU5vy.jpg',
+								'images/496_krfO4tH7XyCcmd.jpg',
+								'images/496_ARYlzk0txKaWnD.jpg' ];
+*/
+		$scope.picturePaths = [];
+
 		//Pulls loc_name, latitude, and longitude from our DB
 		$http({
 		method: 'POST',
@@ -25,13 +36,31 @@ app.controller('spottrCntrl', function($scope, $http) {
 		}).then(function successCallback(response) {
 			// this callback will be called asynchronously
 			// when the response is available
-			$scope.index = response.data.length;
-			$scope.map_location = response.data[0]['loc_name'];
-			$scope.map_latitude = response.data[0]['latitude'];
-			$scope.map_longitude = response.data[0]['longitude'];
-            LOCATIONS = response.data;
             addMapMarkers(response.data);
-            console.log(LOCATIONS);
+		}, function errorCallback(response) {
+			// called asynchronously if an error occurs
+			// or server returns response with an error status.
+			$scope.select_test = "FAILED (callback)";
+		});
+
+
+		$http({
+		method: 'POST',
+		url: 'db_interface.php',
+		headers: {
+		'Content-Type': 'application/json'
+		},
+		data: { key: 'B52C106C63CB00C850584523FB0EC12',
+				action: 'select',
+				table: 'Photo',
+				columns: ['path','location']}
+		}).then(function successCallback(response) {
+			// this callback will be called asynchronously
+			// when the response is available
+            console.log(response.data)
+            response.data.forEach(function(element) {
+            	$scope.picturePaths.push(element['path']);
+            });
 		}, function errorCallback(response) {
 			// called asynchronously if an error occurs
 			// or server returns response with an error status.

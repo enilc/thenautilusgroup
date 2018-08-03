@@ -104,11 +104,12 @@ require_once('db_connect.php');
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                                <img src="images/01.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/02.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/03.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/04.jpg" class="img-thumbnail" alt="Image1">
-                                <img src="images/05.jpg" class="img-thumbnail" alt="Image1">
+
+                                <img src="{{picturePaths[0]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[1]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[2]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[3]}}" class="img-thumbnail" alt="Image1">
+                                <img src="{{picturePaths[4]}}" class="img-thumbnail" alt="Image1">
 
                             <a href="#" class="btn btn-default btn-block">View All Alerts</a>
                         </div>
