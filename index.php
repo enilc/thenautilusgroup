@@ -77,9 +77,12 @@ require_once('db_connect.php');
 
 <body ng-app="spottr" ng-controller="spottrCntrl">
 
+<!-- THIS WOULD SERVE AS THE BUSINESS OBJECT AS IT FILLS THE TRANSFER OBJECT WITH DATA FROM THE DATABASE -->
+<!-- BUSINESS OBJECT STARTS HERE -->
 <script>
 
 </script>
+<!-- BUSINESS OBJECT ENDS HERE -->
 
     <div id="wrapper">
 
@@ -147,12 +150,15 @@ require_once('db_connect.php');
                         <!-- /.panel-heading -->
                         <div class="panel-body">
 
+<!-- THIS WOULD SERVE AS THE CLIENT AS IT DISPLAYS THE OUTPUT FROM BOTH THE BUSINESS OBJECT AND TRANSFER OBJECT COMBINED -->
+<!-- CLIENT STARTS HERE -->
                             <div id="map"></div>
                             <hr>
                             <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">
                               Add New Location
                             </button>
                         </div>
+
                         <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
@@ -230,12 +236,13 @@ require_once('db_connect.php');
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
 
-	
+<!-- THIS WOULD SERVE AS THE TRANSFER OBJECT AS THIS PULLS IN THE DATA FROM THE BUSINESS OBJECT TO INTERACT WITH IT -->
+<!-- TRANSFER OBJECT STARTS HERE -->
 <script type="text/javascript">
 
 spottrInit();
 </script>
-
+<!-- TRANSFER OBJECT ENDS HERE -->
 
 
 </body>
