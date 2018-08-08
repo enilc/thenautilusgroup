@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+
+    <link href="style.css" rel="stylesheet">
+
+  </head>
+
+
+  <body>
+  
+    <div class ="main">
+    <p class="sansserif">
+    <h1>S P O T T R</h1>
+    <!--The div element for the map -->
+    <div id="map"></div>
+
+    <script src="script.js"></script>
+
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial) I setup a key in geocoding api
+    * The callback parameter executes the initMap() function
+    -->
+     <script async defer
+     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxnMU9bIct86r3W4-rJ22Sirsli0U3uH4&callback=initMap">
+     </script>
+     </div>
+ </body>
+
+
+</html>
