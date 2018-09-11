@@ -36,7 +36,7 @@ app.controller('spottrCntrl', function($scope, $http) {
 		//Pulls loc_name, latitude, and longitude from our DB
 		$http({
 		method: 'POST',
-		url: 'db_interface.php',
+		url: 'etc/db_interface.php',
 		headers: {
 		'Content-Type': 'application/json'
 		},
@@ -57,7 +57,7 @@ app.controller('spottrCntrl', function($scope, $http) {
 
 		$http({
 		method: 'POST',
-		url: 'db_interface.php',
+		url: 'etc/db_interface.php',
 		headers: {
 		'Content-Type': 'application/json'
 		},
@@ -88,7 +88,7 @@ $('document').ready(function () {
 			$this.button('reset');
 			}, 8000);*/
 			$.ajax({
-				url: "db_interface.php",
+				url: "etc/db_interface.php",
 				type: "post",
 				data: {
 					key: 'B52C106C63CB00C850584523FB0EC12',
