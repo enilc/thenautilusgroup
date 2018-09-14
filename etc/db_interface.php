@@ -238,7 +238,7 @@
             //Connect to SQL database.
             $dbConn = connectToDatabase();
 
-            $sql = "SELECT email, token FROM spotter.users_awaiting_verification WHERE email = :email AND token = :token";
+            $sql = "SELECT email, token FROM spotter.Queue WHERE email = :email AND token = :token";
             $stmt = $dbConn -> prepare($sql);
 
             if(!$stmt -> execute(array(':email' => strtolower($email), ':token' => $token))){

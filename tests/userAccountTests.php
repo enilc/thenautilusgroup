@@ -546,7 +546,8 @@
         $scope.testStatus[7] = 'danger';
         $scope.testResults[7] = 'FAILED';
         console.log(response.data);
-    }
+    } 
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -573,7 +574,7 @@
         $scope.testStatus[8] = 'danger';
         $scope.testResults[8] = 'FAILED';
         console.log(response.data);
-    }
+    } 
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -603,6 +604,7 @@
         console.log(response.data);
     }
 
+
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
     // or server returns response with an error status.
@@ -617,6 +619,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'negativeinfinity@gmail.com',
         passwordOne: 'Welcome123',
         passwordTwo: 'Welcome123',
@@ -627,15 +630,20 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '1'){
+    if(response.data === '1'){
         $scope.testStatus[10] = 'success';
         $scope.testResults[10] = 'Passed';
-    } else {
+    } else if (response.data === '0'){
         $scope.testStatus[10] = 'danger';
         $scope.testResults[10] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[10] = 'warning';
+        $scope.testResults[10] = 'crash';
+        console.log(response.data);
     }
 
+ 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
     // or server returns response with an error status.
@@ -652,6 +660,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'caleb.allen@gmail.com',
         passwordOne: 'Welcome123',
         passwordTwo: 'Welcome123',
@@ -662,14 +671,19 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[11] = 'success';
         $scope.testResults[11] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[11] = 'danger';
         $scope.testResults[11] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[11] = 'warning';
+        $scope.testResults[11] = 'crash';
+        console.log(response.data);
     }
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -686,6 +700,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'negativeinfinity@gmail.com',
         passwordOne: 'Welcome123',
         passwordTwo: 'Welcome',
@@ -696,14 +711,19 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[12] = 'success';
         $scope.testResults[12] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[12] = 'danger';
         $scope.testResults[12] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[12] = 'warning';
+        $scope.testResults[12] = 'crash';
+        console.log(response.data);
     }
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -719,6 +739,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'negativeinfinity@gmail.com',
         passwordOne: 'Wel',
         passwordTwo: 'Wel',
@@ -729,14 +750,19 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[13] = 'success';
         $scope.testResults[13] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[13] = 'danger';
         $scope.testResults[13] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[13] = 'warning';
+        $scope.testResults[13] = 'crash';
+        console.log(response.data);
     }
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -752,6 +778,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'negativeinfinity@gmail.com',
         passwordOne: 'Welcome123',
         passwordTwo: 'Welcome123',
@@ -762,14 +789,19 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[14] = 'success';
         $scope.testResults[14] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[14] = 'danger';
         $scope.testResults[14] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[14] = 'warning';
+        $scope.testResults[14] = 'crash';
+        console.log(response.data);
     }
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -785,6 +817,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'negativeinfinity@gmail.com',
         passwordOne: 'Welcome123',
         passwordTwo: 'Welcome123',
@@ -795,14 +828,19 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[15] = 'success';
         $scope.testResults[15] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[15] = 'danger';
         $scope.testResults[15] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[15] = 'warning';
+        $scope.testResults[15] = 'crash';
+        console.log(response.data);
     }
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -818,6 +856,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'negativeinfinity@gmail.com',
         passwordOne: 'Welcome123',
         passwordTwo: 'Welcome123',
@@ -828,14 +867,19 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[16] = 'success';
         $scope.testResults[16] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[16] = 'danger';
         $scope.testResults[16] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[16] = 'warning';
+        $scope.testResults[16] = 'crash';
+        console.log(response.data);
     }
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -851,6 +895,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'caleb.allen@gmail.com',
         passwordOne: 'Wel',
         passwordTwo: 'Welcome123',
@@ -861,14 +906,19 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[17] = 'success';
         $scope.testResults[17] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[17] = 'danger';
         $scope.testResults[17] = 'FAILED';
         console.log(response.data);
+    } else {
+        $scope.testStatus[17] = 'warning';
+        $scope.testResults[17] = 'crash';
+        console.log(response.data);
     }
+
 
     }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -885,6 +935,7 @@
         'Content-Type': 'application/json'
     },
     data: {
+        test: '1',
         email:'negativeinfinity@gmail.com',
         passwordOne: 'Welcome123',
         passwordTwo: 'Welcome123',
@@ -895,12 +946,16 @@
     }).then(function successCallback(response) {
     // this callback will be called asynchronously
     // when the response is available
-    if(response.data == '0'){
+    if(response.data === '0'){
         $scope.testStatus[18] = 'success';
         $scope.testResults[18] = 'Passed';
-    } else {
+    } else if (response.data === '1'){
         $scope.testStatus[18] = 'danger';
         $scope.testResults[18] = 'FAILED';
+        console.log(response.data);
+    } else {
+        $scope.testStatus[18] = 'warning';
+        $scope.testResults[18] = 'crash';
         console.log(response.data);
     }
 

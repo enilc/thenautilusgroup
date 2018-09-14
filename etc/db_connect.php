@@ -8,8 +8,8 @@ function connectToDatabase(){
     } else {   
         $dbhost = 'aaarl7tfabntmd.cvbl6vddyfbo.us-west-1.rds.amazonaws.com';   
         $dbport = '3306';  
-        $username = 'AGENT';    
-        $password = 'SECRET';    
+        $username = 'nemo';    
+        $password = 'secret';    
     }
     $dbname = 'spotter';//$_SERVER['RDS_DB_NAME'];
     $charset = 'utf8';

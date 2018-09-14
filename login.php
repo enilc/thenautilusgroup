@@ -131,53 +131,51 @@
             </h2>
 
           </div>
-          <div id="newUserBody" class="modal-body">
-
-
-<div class="container">
-    <div class="container-fluid">
-  <form class="form-horizontal">
-    <div id="fnGrp" class="form-group">
-      <label class="col-sm-2 control-label" for="fnInput">First Name</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" id="fnInput"><span id="fnMessage"></span>
-        <span id="fnFeedback"></span>
-      </div>
-    </div>
-    <div id="lnGrp" class="form-group">
-      <label class="col-sm-2 control-label" for="lnInput">Last Name</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" id="lnInput"><span id="lnMessage"></span>
-        <span id="lnFeedback"></span>
-      </div>
-    </div>
-    <div id="emlGrp" class="form-group">
-      <label class="col-sm-2 control-label" for="regEmail">Email Address</label>
-      <div class="col-sm-6">
-        <input type="text" class="form-control" id="regEmail"><span id="emlMessage"></span>
-        <span id="emlFeedback" class="form-control-feedback"></span>
-      </div>
-    </div>
-    <div id="pwGrp1" class="form-group">
-      <label class="col-sm-2 control-label" for="regPW1">Password</label>
-      <div class="col-sm-6">
-        <input type="password" class="form-control" id="regPW1">
-        <span id="pwFeedback1"></span>
-      </div>
-    </div>
-    <div id="pwGrp2" class="form-group">
-      <label class="col-sm-2 control-label" for="regPW2">Confirm Password</label>
-      <div class="col-sm-6">
-        <input type="password" class="form-control" id="regPW2"><span id="passwordMessage"></span>
-        <span id="pwFeedback2"></span>
-      </div>
-    </div>
+            <div id="newUserBody" class="modal-body">
+            <div class="container">
+                <div class="container-fluid">
+              <form id="newUserForm" class="form-horizontal" action="etc/registerUser.php" method="post">
+                <div id="fnGrp" class="form-group">
+                  <label class="col-sm-2 control-label" for="fnInput">First Name</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" name="firstName" id="fnInput"><span id="fnMessage"></span>
+                    <span id="fnFeedback"></span>
+                  </div>
+                </div>
+                <div id="lnGrp" class="form-group">
+                  <label class="col-sm-2 control-label" for="lnInput">Last Name</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" name="lastName" id="lnInput"><span id="lnMessage"></span>
+                    <span id="lnFeedback"></span>
+                  </div>
+                </div>
+                <div id="emlGrp" class="form-group">
+                  <label class="col-sm-2 control-label" for="regEmail">Email Address</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" name="email" id="regEmail"><span id="emlMessage"></span>
+                    <span id="emlFeedback" class="form-control-feedback"></span>
+                  </div>
+                </div>
+                <div id="pwGrp1" class="form-group">
+                  <label class="col-sm-2 control-label" for="regPW1">Password</label>
+                  <div class="col-sm-6">
+                    <input type="password" name="passwordOne" class="form-control" id="regPW1">
+                    <span id="pwFeedback1"></span>
+                  </div>
+                </div>
+                <div id="pwGrp2" class="form-group">
+                  <label class="col-sm-2 control-label" for="regPW2">Confirm Password</label>
+                  <div class="col-sm-6">
+                    <input type="password" name="passwordTwo" class="form-control" id="regPW2"><span id="passwordMessage"></span>
+                    <span id="pwFeedback2"></span>
+                  </div>
+                </div>
 
 
 
-  </form>
-</div>
-</div>
+              </form>
+            </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -207,8 +205,6 @@
     var app = angular.module('userAuthentication', []);
     app.controller('login', function($scope, $http) {
 
-        $scope.nEmail = "nemo@nautilus.group";
-        $scope.nPassword = "-----NautilusAdmin-----";
 
         $scope.eClass = "form-group";
         $scope.pClass = "form-group";
@@ -280,31 +276,7 @@ $(document).ready(function(){
                 nameFeedback('last');
                 break;
             default:
-                $('#regUsr').button('loading');
-                $.ajax({
-                url: "etc/db_interface.php",
-                type: "POST",
-                data: {key: 'B52C106C63CB00C850584523FB0EC12',
-                    action: 'user_exist',
-                    email: $('#regEmail').val().toLowerCase()},
-                dataType: "text",
-                success: function(response) {
-
-                    //User Email Already Exists, so we cannot register it.
-                    if(response === '1'){
-                        //Feedback is in the form.
-                        $('#regUsr').button('reset');
-                    } else {
-                        //TODO: Submit to user registration form with relevant details.
-                        console.log('All is Well');
-                        //$('div[class="modal-dialog modal-lg"]').removeClass('modal-lg');
-                        $('#newUserBody').html('<h3>Successfully Registered!</h3>\
-                        <p>You will receive an email shortly. \
-                        Follow the directions therein to verify your email address.');
-                        $('#regUsr').button('reset');
-                    }
-                },
-                });
+                $('#newUserForm').submit();
                 break;
         }
 
@@ -327,7 +299,7 @@ $(document).ready(function(){
             email: $('#regEmail').val().toLowerCase()},
         dataType: "text",
         success: function(response) {
-
+            console.log(response);
             //User Email Already Exists, so we cannot register it.
             if(response === '1'){
 
