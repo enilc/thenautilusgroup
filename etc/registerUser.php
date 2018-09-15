@@ -15,105 +15,7 @@ require 'src/SMTP.php';
 //Shim to use for interaction with angularJS. Credit: https://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST))
     $_POST = json_decode(file_get_contents('php://input'), true);
-?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- MetisMenu CSS -->
-    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <style>
-
-        .glyphicon.fast-right-spinner {
-            -webkit-animation: glyphicon-spin-r 1s infinite linear;
-            animation: glyphicon-spin-r 1s infinite linear;
-        }
-        @-webkit-keyframes glyphicon-spin-r {
-            0% {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-
-            100% {
-                -webkit-transform: rotate(359deg);
-                transform: rotate(359deg);
-            }
-        }
-
-        @keyframes glyphicon-spin-r {
-            0% {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-
-            100% {
-                -webkit-transform: rotate(359deg);
-                transform: rotate(359deg);
-            }
-        }
-    </style>
-
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Spotter Registration Page</h3>
-                    </div>
-                    <div class="panel-body">
-                        <?php main(); ?>
-                        </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- jQuery -->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- Metis Menu Plugin JavaScript -->
-    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="../dist/js/sb-admin-2.js"></script>
-
-
-
-
-<?php
 function sendEml($to, $msgHTML, $msgPlainText, $debug = 0){
 
     //Credit: This code comes, mostly, from the PHPMailer documentation
@@ -328,6 +230,7 @@ function main(){
 
     if(!isset($_POST['email']) || !isset($_POST['passwordOne']) || !isset($_POST['passwordTwo']) || !isset($_POST['firstName']) || !isset($_POST['lastName'])){
         if(isset($_GET['email']) && isset($_GET['token'])){
+            require('registerUserPresentationPartOne.php');
 
             $entry = getQueueEntry($_GET['email']);
 
@@ -350,6 +253,7 @@ function main(){
                     <p>Please try <a href=\"../login.php\">registering again</a></p>";
                 }
             }
+            require('registerUserPresentationPartTwo.php');
         } else {
             echo '0';
         }
@@ -365,6 +269,7 @@ function main(){
             echo 'ERROR';
         }
     } else { //We have a post with all expected fields. Most likely from our web form
+        require('registerUserPresentationPartOne.php');
 
         //Remove user from queue if it is already there.
         deleteUserFromQueue($_POST['email']);
@@ -382,10 +287,10 @@ function main(){
                 addUserToQueue($_POST);
                 break;
         }
+        require('registerUserPresentationPartTwo.php');
     }
     
 }
 
-//$token = hash('sha256', makeRandomString() . $toAddress);
-//echo "<html><body><h2>We have a PHP ECHO!!!!</h2><hr /><h2>$results</h2></body></html>";
+main();
 ?>

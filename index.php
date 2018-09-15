@@ -14,7 +14,7 @@
 ?>
     
 <?php 
-require_once('etc/db_connect.php');
+//require_once('etc/db_connect.php');
 
 ?>
 

@@ -11,7 +11,7 @@ function authenticateUser($email, $password){
 
 	if(!$stmt -> execute(array(':email' => $email))){
 	    return False;
-	} else {
+	} else if($stmt -> rowCount() > 0) {
 	    $selected = $stmt -> fetchAll() [0]; //Grab the first selected record.
 	    if(strtolower($selected['email']) == strtolower($email) && 
 	        password_verify($password,$selected['password'])){
@@ -19,6 +19,8 @@ function authenticateUser($email, $password){
 	    } else {
 	        return False;
 	    }
+	} else { //Account does not exist.
+		return False;
 	}
 	
 }

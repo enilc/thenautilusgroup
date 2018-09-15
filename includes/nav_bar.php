@@ -48,13 +48,13 @@
                             <!-- /input-group 
                         </li>-->
                         <li>
-                            <a href=<?php echo "\"/spotter/index.php?sid=" . session_id() . "\"" ?>><i class="fa fa-home fa-fw"></i> Spotter Map</a>
+                            <a href=<?php echo "\"/index.php?sid=" . session_id() . "\"" ?>><i class="fa fa-home fa-fw"></i> Spotter Map</a>
                         </li>
                         <li>
-                            <a href=<?php echo "\"/spotter/tests/db_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Database</a>
+                            <a href=<?php echo "\"/tests/db_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Database</a>
                         </li>
                         <li>
-                            <a href=<?php echo "\"/spotter/tests/userAccountTests.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i>Test User Account Registration and Connectivity</a>
+                            <a href=<?php echo "\"/tests/userAccountTests.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i>Test User Account Registration and Connectivity</a>
                         </li>
 
                     </ul>
