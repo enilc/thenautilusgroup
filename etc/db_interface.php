@@ -230,6 +230,28 @@
         function conTestHandler($data){
             echo $data;
         }
+        function dbValidateEmail($email, $token){
+            if($email == NULL || $token == NULL){
+                echo '0';
+                return 1;
+            }
+            //Connect to SQL database.
+            $dbConn = connectToDatabase();
+
+            $sql = "SELECT email, token FROM spotter.Queue WHERE email = :email AND token = :token";
+            $stmt = $dbConn -> prepare($sql);
+
+            if(!$stmt -> execute(array(':email' => strtolower($email), ':token' => $token))){
+                echo '0';
+            } else {
+                if($stmt -> rowCount() > 0){
+                    echo '1';
+                } else {
+                    echo '0';
+                }
+
+            }
+        }
 
         //List valid column names for a specific table
         function getColumnNames($table){
@@ -247,6 +269,21 @@
             $stmt = $dbConn->prepare('SELECT table_name FROM information_schema.tables WHERE table_schema=:db;');
             $stmt->execute(array(':db' => $db));
             return $stmt->fetchAll(PDO::FETCH_COLUMN);
+        }
+
+        //returns '1' if a user exists in the User database, returns 0 otherwise.
+        function dbUserExist($email){
+
+            $dbConn = connectToDatabase();
+            $sql = 'SELECT * FROM spotter.User WHERE email = :email';
+            $stmt = $dbConn->prepare($sql);
+            $stmt->execute(array(':email' => $email));
+            $results = $stmt->fetchAll();
+            if(count($results) > 0){
+                echo "1";
+            } else {
+                echo "0";
+            }
         }
     }
 
@@ -285,6 +322,13 @@ function postInterface($dbMed){
                 break;
             case 'clean_test':
                 $dbMed -> dbTestCleanup($_POST['filter']);
+                break;
+            case 'user_exist':
+                $dbMed -> dbUserExist($_POST['email']);
+                break;
+            case 'verify_email':
+                $dbMed -> dbValidateEmail((isset($_POST['email']) ? $_POST['email'] : NULL),
+                                            (isset($_POST['token']) ? $_POST['token'] : NULL));
                 break;
             default:
                 break;

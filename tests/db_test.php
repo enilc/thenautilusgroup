@@ -1,6 +1,6 @@
 <?php 
 
-    require_once('user_funct.php');
+    require_once('../etc/user_funct.php');
 
     //We check to see if we have a passed session id
     if(isset($_GET['sid'])){
@@ -16,7 +16,7 @@
 ?>
 
 <?php
-	require_once('db_connect.php');
+	require_once('../etc/db_connect.php');
 
 
 	function testDatabaseConnection(){
@@ -279,19 +279,19 @@
     <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
-    <link href="vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
 
     <!-- Morris Charts CSS -->
-    <link href="vendor/morrisjs/morris.css" rel="stylesheet">
+    <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -318,7 +318,7 @@
 
         <?php 
         //Allows ud to edit the navigation bar one time for all website pages.
-        require_once('includes/nav_bar.php') 
+        require_once('../includes/nav_bar.php') 
         ?>
 
         <div id="page-wrapper">
@@ -409,17 +409,17 @@ Test 9 {{cleanup}}: db cleanup
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
 
     <!-- jQuery -->
-    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/jquery/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
 
 
     <!-- Custom Theme JavaScript -->
-    <script src="dist/js/sb-admin-2.js"></script>
+    <script src="../dist/js/sb-admin-2.js"></script>
 
 <script>
     var app = angular.module('testDatabaseInterface', []);
@@ -428,7 +428,7 @@ Test 9 {{cleanup}}: db cleanup
     	//Test 1: Test basic connection. We should get the same data back.
         $http({
           method: 'POST',
-          url: 'db_interface.php',
+          url: '../etc/db_interface.php',
           headers: {
             'Content-Type': 'application/json'
             },
@@ -446,7 +446,7 @@ Test 9 {{cleanup}}: db cleanup
         //Test 2: Test key test. We should get "key test passed" back
         $http({
           method: 'POST',
-          url: 'db_interface.php',
+          url: '../etc/db_interface.php',
           headers: {
             'Content-Type': 'application/json'
             },
@@ -466,7 +466,7 @@ Test 9 {{cleanup}}: db cleanup
         //Test 3: Test INSERT function . Should recieve "success" back.
 		$http({
 		method: 'POST',
-		url: 'db_interface.php',
+		url: '../etc/db_interface.php',
 		headers: {
 		'Content-Type': 'application/json'
 		},
@@ -484,7 +484,7 @@ Test 9 {{cleanup}}: db cleanup
 			//Test 4: Test SELECT function . Should recieve "success" back. Nested here because It must execute AFTER Test 3 finishes.
 			$http({
 			method: 'POST',
-			url: 'db_interface.php',
+			url: '../etc/db_interface.php',
 			headers: {
 			'Content-Type': 'application/json'
 			},
@@ -500,7 +500,7 @@ Test 9 {{cleanup}}: db cleanup
 					//Test 9: cleaning up after ourselves.
 						$http({
 							method: 'POST',
-							url: 'db_interface.php',
+							url: '../etc/db_interface.php',
 							headers: {
 							'Content-Type': 'application/json'
 							},
@@ -532,7 +532,7 @@ Test 9 {{cleanup}}: db cleanup
 		//Test 5: Blocking Code Injection (See the "DELETE" in table)
 		$http({
 		method: 'POST',
-		url: 'db_interface.php',
+		url: '../etc/db_interface.php',
 		headers: {
 		'Content-Type': 'application/json'
 		},
@@ -553,7 +553,7 @@ Test 9 {{cleanup}}: db cleanup
 		//Test 6: Test code injection through columns. See "DELETE" in columns.
 		$http({
 		method: 'POST',
-		url: 'db_interface.php',
+		url: '../etc/db_interface.php',
 		headers: {
 		'Content-Type': 'application/json'
 		},
@@ -575,7 +575,7 @@ Test 9 {{cleanup}}: db cleanup
 		//Test 7: Same as 5, only testing INSERT
 		$http({
 		method: 'POST',
-		url: 'db_interface.php',
+		url: '../etc/db_interface.php',
 		headers: {
 		'Content-Type': 'application/json'
 		},
@@ -596,7 +596,7 @@ Test 9 {{cleanup}}: db cleanup
 		//Test 8: Same as 6, only testing INSERT
 		$http({
 		method: 'POST',
-		url: 'db_interface.php',
+		url: '../etc/db_interface.php',
 		headers: {
 		'Content-Type': 'application/json'
 		},

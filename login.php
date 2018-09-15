@@ -1,5 +1,5 @@
 <?php
-    require_once('user_funct.php');
+    require_once('etc/user_funct.php');
 
     if(!isset($_SESSION['authenticated']) || !$_SESSION['authenticated']) { //We don't have a session to use
         if(isset($_POST['email']) && isset($_POST['password'])){ //We don't have any login information posted
@@ -47,6 +47,36 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+
+        .glyphicon.fast-right-spinner {
+            -webkit-animation: glyphicon-spin-r 1s infinite linear;
+            animation: glyphicon-spin-r 1s infinite linear;
+        }
+        @-webkit-keyframes glyphicon-spin-r {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(359deg);
+                transform: rotate(359deg);
+            }
+        }
+
+        @keyframes glyphicon-spin-r {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(359deg);
+                transform: rotate(359deg);
+            }
+        }
+    </style>
 
 </head>
 
@@ -75,14 +105,86 @@
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
                                 <div ng-click="attemptAutentication()" ng-class="loginBtn">{{btnMessage}}</div>
-                                <input type="submit" class="hidden" id="subFormBtn">
+                                <input type="submit" class="hidden" id="subFormBtn"><hr />
+                                                        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#registerUserModal">
+                            Create an Account!
+                        </button>
                             </fieldset>
                         </form>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- New Location Modal -->
+    <div class="modal fade" id="registerUserModal" tabindex="-1" role="dialog" aria-labelledby="newUserLable" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title d-inline" id="newUserLable">Start spotting!
+
+            <button type="button" id="locModalCloseBtn" class="close d-inline" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            </h2>
+
+          </div>
+            <div id="newUserBody" class="modal-body">
+            <div class="container">
+                <div class="container-fluid">
+              <form id="newUserForm" class="form-horizontal" action="etc/registerUser.php" method="post">
+                <div id="fnGrp" class="form-group">
+                  <label class="col-sm-2 control-label" for="fnInput">First Name</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" name="firstName" id="fnInput"><span id="fnMessage"></span>
+                    <span id="fnFeedback"></span>
+                  </div>
+                </div>
+                <div id="lnGrp" class="form-group">
+                  <label class="col-sm-2 control-label" for="lnInput">Last Name</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" name="lastName" id="lnInput"><span id="lnMessage"></span>
+                    <span id="lnFeedback"></span>
+                  </div>
+                </div>
+                <div id="emlGrp" class="form-group">
+                  <label class="col-sm-2 control-label" for="regEmail">Email Address</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" name="email" id="regEmail"><span id="emlMessage"></span>
+                    <span id="emlFeedback" class="form-control-feedback"></span>
+                  </div>
+                </div>
+                <div id="pwGrp1" class="form-group">
+                  <label class="col-sm-2 control-label" for="regPW1">Password</label>
+                  <div class="col-sm-6">
+                    <input type="password" name="passwordOne" class="form-control" id="regPW1">
+                    <span id="pwFeedback1"></span>
+                  </div>
+                </div>
+                <div id="pwGrp2" class="form-group">
+                  <label class="col-sm-2 control-label" for="regPW2">Confirm Password</label>
+                  <div class="col-sm-6">
+                    <input type="password" name="passwordTwo" class="form-control" id="regPW2"><span id="passwordMessage"></span>
+                    <span id="pwFeedback2"></span>
+                  </div>
+                </div>
+
+
+
+              </form>
+            </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="regUsr" data-loading-text="&nbsp;&nbsp;&nbsp;<i class='glyphicon glyphicon-repeat fast-right-spinner'></i>&nbsp;&nbsp;&nbsp;" class="btn btn-primary">Register!</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -103,8 +205,6 @@
     var app = angular.module('userAuthentication', []);
     app.controller('login', function($scope, $http) {
 
-        $scope.nEmail = "nemo@nautilus.group";
-        $scope.nPassword = "-----NautilusAdmin-----";
 
         $scope.eClass = "form-group";
         $scope.pClass = "form-group";
@@ -115,7 +215,7 @@
         $scope.attemptAutentication = function() {
             $http({
               method: 'POST',
-              url: 'db_interface.php',
+              url: 'etc/db_interface.php',
               headers: {
                 'Content-Type': 'application/json'
                 },
@@ -128,14 +228,12 @@
                 // this callback will be called asynchronously
                 // when the response is available
                 if(response.data == '1'){
-                    console.log('passwd');
                     angular.element(document.getElementById('subFormBtn')).trigger('click');
                 } else {
                     $scope.eClass = "form-group has-error has-feedback";
                     $scope.pClass = "form-group has-error has-feedback";
                     $scope.loginBtn = "btn btn-lg btn-danger btn-block";
                     $scope.btnMessage = "Retry";
-                    console.log(response.data);
                 }
               }, function errorCallback(response) {
                 // called asynchronously if an error occurs
@@ -144,6 +242,189 @@
               }); 
         };
     });
+$(document).ready(function(){
+    $('#regUsr').click(function() {
+
+        switch (true){
+            //Is the email valid
+            case (!isEmail($('#regEmail').val())):
+
+                //Remove Existing Classes
+                $('#emlGrp').removeClass($('#emlGrp').attr('class'));
+                $('#emlFeedback').removeClass($('#emlFeedback').attr('class'));
+
+                //Overwrite Classes
+                $('#emlGrp').addClass('form-group has-warning has-feedback');
+                $('#emlFeedback').addClass('glyphicon glyphicon-repeat fast-right-spinner form-control-feedback');
+
+                $('#emlMessage').html('This email appears to be incomplete or invalid.')
+                break;
+            //Passwords don't match. Feedback is built into the form.
+            case ($('#regPW1').val() !== $('#regPW2').val()):
+                break;
+            //Is the password short or empty
+            case ($('#regPW1').val().length < 8):
+                break;
+            case ($('#fnInput').val() === '' && $('#lnInput').val() === ''):
+                nameFeedback('first');
+                nameFeedback('last');
+                break;
+            case ($('#fnInput').val() === ''):
+                nameFeedback('first');
+                break;
+            case ($('#lnInput').val() === ''):
+                nameFeedback('last');
+                break;
+            default:
+                $('#newUserForm').submit();
+                break;
+        }
+
+
+    });
+
+    $('#regEmail').change(function(){
+
+        $('#emlGrp').removeClass($('#emlGrp').attr('class'));
+        $('#emlFeedback').removeClass($('#emlFeedback').attr('class'));
+        
+        $('#emlGrp').addClass('form-group has-success has-feedback');
+        $('#emlFeedback').addClass('glyphicon glyphicon-repeat fast-right-spinner form-control-feedback');
+
+        $.ajax({
+        url: "etc/db_interface.php",
+        type: "POST",
+        data: {key: 'B52C106C63CB00C850584523FB0EC12',
+            action: 'user_exist',
+            email: $('#regEmail').val().toLowerCase()},
+        dataType: "text",
+        success: function(response) {
+            console.log(response);
+            //User Email Already Exists, so we cannot register it.
+            if(response === '1'){
+
+                //Remove Existing Classes
+                $('#emlGrp').removeClass($('#emlGrp').attr('class'));
+                $('#emlFeedback').removeClass($('#emlFeedback').attr('class'));
+
+                //Overwrite Classes
+                $('#emlGrp').addClass('form-group has-warning has-feedback');
+                $('#emlFeedback').addClass('glyphicon glyphicon-warning-sign form-control-feedback');
+
+                $('#emlMessage').html('This email address is already registered.');
+            } else {
+                //Remove Existing Classes
+                $('#emlGrp').removeClass($('#emlGrp').attr('class'));
+                $('#emlFeedback').removeClass($('#emlFeedback').attr('class'));
+
+                //Overwrite Classes
+                $('#emlGrp').addClass('form-group has-success has-feedback');
+                $('#emlFeedback').addClass('glyphicon glyphicon-ok form-control-feedback');
+
+                $('#emlMessage').html('');
+            }
+        },
+        });
+    });
+
+    $('#regPW1').change(function(){
+        passwordFeedback();
+    });
+
+    $('#regPW2').change(function(){
+        passwordFeedback();
+    });
+
+    $('#fnInput').change(function(){
+        nameFeedback('first');
+    })
+    $('#lnInput').change(function(){
+
+        nameFeedback('last');
+    })
+
+
+    //$('#emlFeedback').addClass('glyphicon glyphicon-repeat fast-right-spinner form-control-feedback');
+});
+
+function nameFeedback(type){
+
+    var nm = ((type === 'first') ? 'fn' : 'ln');
+
+    if($('#' + nm + 'Input').val() === ''){
+        //Remove Existing Classes
+        $('[id*="' + nm + 'Grp"]').removeClass($('[id*="' + nm + 'Grp"]').attr('class'));
+        $('[id*="' + nm + 'Feedback"]').removeClass($('[id*="' + nm + 'Feedback"]').attr('class'));
+
+        //Overwrite Classes
+        $('[id*="' + nm + 'Grp"]').addClass('form-group has-error has-feedback');
+        $('[id*="' + nm + 'Feedback"]').addClass('pwFeedback glyphicon glyphicon-remove form-control-feedback');
+
+        $('[id*="' + nm + 'Message"]').html('Both your first and last names are required.');
+
+    } else {
+        //Remove Existing Classes
+        $('[id*="' + nm + 'Grp"]').removeClass($('[id*="' + nm + 'Grp"]').attr('class'));
+        $('[id*="' + nm + 'Feedback"]').removeClass($('[id*="' + nm + 'Feedback"]').attr('class'));
+
+        //Overwrite Classes
+        $('[id*="' + nm + 'Grp"]').addClass('form-group has-success has-feedback');
+        $('[id*="' + nm + 'Feedback"]').addClass('pwFeedback glyphicon glyphicon-ok form-control-feedback');
+
+        $('[id*="' + nm + 'Message"]').html('');
+    }
+
+}
+
+function passwordFeedback(){
+
+    if($('#regPW1').val() === '' || $('#regPW2').val() === ''){
+        return;
+    } else if ($('#regPW1').val() === $('#regPW2').val()){
+        if($('#regPW1').val().length < 8){
+            //Remove Existing Classes
+            $('[id*="pwGrp"]').removeClass($('[id*="pwGrp"]').attr('class'));
+            $('[id*="pwFeedback"]').removeClass($('[id*="pwFeedback"]').attr('class'));
+
+            //Overwrite Classes
+            $('[id*="pwGrp"]').addClass('form-group has-error has-feedback');
+            $('[id*="pwFeedback"]').addClass('pwFeedback glyphicon glyphicon-remove form-control-feedback');
+
+            $('[id*="passwordMessage"]').html('Password is too short.');
+        } else {
+            //Remove Existing Classes
+            $('[id*="pwGrp"]').removeClass($('[id*="pwGrp"]').attr('class'));
+            $('[id*="pwFeedback"]').removeClass($('[id*="pwFeedback"]').attr('class'));
+
+            //Overwrite Classes
+            $('[id*="pwGrp"]').addClass('form-group has-success has-feedback');
+            $('[id*="pwFeedback"]').addClass('pwFeedback glyphicon glyphicon-ok form-control-feedback');
+
+            $('[id*="passwordMessage"]').html('');
+        }
+
+    } else {
+        //Remove Existing Classes
+        $('[id*="pwGrp"]').removeClass($('[id*="pwGrp"]').attr('class'));
+        $('[id*="pwFeedback"]').removeClass($('[id*="pwFeedback"]').attr('class'));
+
+        //Overwrite Classes
+        $('[id*="pwGrp"]').addClass('form-group has-error has-feedback');
+        $('[id*="pwFeedback"]').addClass('pwFeedback glyphicon glyphicon-remove form-control-feedback');
+
+        $('[id*="passwordMessage"]').html('Passwords do not match.');
+        if($('#regPW1').val().length < 8 || $('#regPW2').val().length < 8){
+            $('[id*="passwordMessage"]').html($('[id*="passwordMessage"]').html() + ' Also, at least one password is too short.');
+        }
+
+    }
+}
+
+//Credit: https://stackoverflow.com/a/2507043
+function isEmail(email) {
+  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return regex.test(email);
+}
 
 </script>
 

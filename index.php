@@ -1,5 +1,5 @@
 <?php 
-    require_once('user_funct.php');
+    require_once('etc/user_funct.php');
     //We check to see if we have a passed session id
     if(isset($_GET['sid'])){
         //We make sure the session exists.
@@ -14,7 +14,7 @@
 ?>
     
 <?php 
-require_once('db_connect.php');
+//require_once('etc/db_connect.php');
 
 ?>
 
@@ -238,10 +238,7 @@ require_once('db_connect.php');
 
 <!-- THIS WOULD SERVE AS THE TRANSFER OBJECT AS THIS PULLS IN THE DATA FROM THE BUSINESS OBJECT TO INTERACT WITH IT -->
 <!-- TRANSFER OBJECT STARTS HERE -->
-<script type="text/javascript">
 
-spottrInit();
-</script>
 <!-- TRANSFER OBJECT ENDS HERE -->
 
 
