@@ -259,8 +259,14 @@ function main(){
         }
     } else if (isset($_POST['test'])){ //If we are running tests.
 
-        $results = verifyUserDetails($_POST['email'], $_POST['passwordOne'], $_POST['passwordTwo'], 
-                                        $_POST['firstName'], $_POST['lastName'], $_POST['token']);
+        if(isset($_POST['email']) && isset($_POST['passwordOne']) && isset($_POST['passwordTwo']) && 
+            isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['token']))
+        {
+            $results = verifyUserDetails($_POST['email'], $_POST['passwordOne'], $_POST['passwordTwo'], 
+                                            $_POST['firstName'], $_POST['lastName'], $_POST['token']);
+        } else {
+            $results = false;
+        }
         if($results == false){
             echo '0';
         } else if ($results == true){
