@@ -36,6 +36,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+	
+	<!-- Manifest for PWA -->
+	<link rel="manifest" href="/manifest.json">
+	
+	<!-- Add to home screen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Spot.tr">
+    <link rel="apple-touch-icon" href="images/icons/icon-152x152.png">
+	
+	<!-- Add to home screen for Microsoft -->
+	<meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
 
     <title>DB Interface Test</title>
 
