@@ -93,6 +93,8 @@ function isUserRegistered($email){
     } 
 }
 
+
+//Returns true if these passwords strings are valid
 function isPasswordValid($pw1, $pw2){
     if(strlen($pw1) >= 8 && strlen($pw2) >= 8 
         && strcmp($pw1, $pw2) == 0) {
@@ -102,6 +104,7 @@ function isPasswordValid($pw1, $pw2){
     }
 }
 
+//This looks in the database Queue returns the entry for a particular email
 function getQueueEntry($email){
     $dbConn = connectToDatabase();
     $sql = "SELECT * FROM spotter.Queue WHERE email = :email";
@@ -115,21 +118,28 @@ function getQueueEntry($email){
     }
 }
 
+
+//Used for testing, this function will use the functions here to verify user details.
 function verifyUserDetails($email, $passwordOne, $passwordTwo, $firstName, $lastName, $token){
 
+    //Check for password validity, or an empty required field.
     if(!isPasswordValid($passwordOne, $passwordTwo) || empty($firstName) || 
             empty($lastName) || empty($email) || empty($token)){
 
         return false;
     }
 
+    //Make sure the user is not already registered in the system.
     if(isUserRegistered($email)){
         return false;
     }
 
+    //If email is not already registered, query the database for the queue entry for this email
     $qEntry = getQueueEntry($email);
     
+    //Check to see if there was anything found in the queue
     if(sizeof($qEntry) > 0){
+        //Check the token provided against the one in the queue.
         if(strcmp($qEntry[0]['token'],$token) != 0) {
             return false;
         }
@@ -138,6 +148,7 @@ function verifyUserDetails($email, $passwordOne, $passwordTwo, $firstName, $last
    return true;
 }
 
+//Adds a user entry to the Queue table in the spottr database.
 function addUserToQueue($details){
     $token = makeToken($details['email']);
     //Create Queue Entry
@@ -154,12 +165,13 @@ function addUserToQueue($details){
         echo 'Error with creating user';
         exit(0);
     } else {
-        //TODO: Send verifcation email
+        //Now that the entry was added, we send a verification email.
         echo '<h2>Sending Verification Email</h2>';
         sendEml($details['email'], prepEmailBody($details['email'],$token), '');
     }
 }
 
+//Remove a user from the registration queue. Most commonly done after verification of email address.
 function deleteUserFromQueue($email){
 
     $dbConn = connectToDatabase();
@@ -172,6 +184,7 @@ function deleteUserFromQueue($email){
     }
 }
 
+//Messy funciton to prep a simple verification email body.
 function prepEmailBody($eml, $token){
     $path = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
@@ -194,6 +207,7 @@ function prepEmailBody($eml, $token){
     return $body;
 }
 
+//Takes a user in the Queue table and moves them into the User table. Done post verification.
 function activateUserInQueue($email){
     $dbConn = connectToDatabase();
     $sql =  "INSERT INTO spotter.User (email, password, first_name, last_name, date_joined)
@@ -207,60 +221,60 @@ function activateUserInQueue($email){
     }
 }
 
-
-
-/*************************************
-        email:'smerd@mailinator.com',
-        passwordOne: 'Welcome123',
-        passwordTwo: 'Welcome123',
-        firstName: 'Bobs',
-        lastName: 'Uruncle',
-        token: '29B61A8EF1DEA154AE76EB234AE3CA207800CCDAE5C42857490959F5C29FD453'
-/*************************************/
 function main(){
-    //$_POST['email'] = 'negativeinfinity@gmail.com';   //In Queue
-    //$_POST['email'] = 'caleb.allen@gmail.com';        //Registered
-    /*$_POST['email'] = 'smerd@mailinator.com';           //Unregistered
-    $_POST['passwordOne'] = 'Welcome123';
-    $_POST['passwordTwo'] = 'Welcome123';
-    $_POST['firstName'] = 'Charlie';
-    if(!isset($_GET['email'])){
-        $_POST['lastName'] = 'Chapman';
-        }*/
 
+    //Tests all have these variables set. So this is a check for GET requests.
     if(!isset($_POST['email']) || !isset($_POST['passwordOne']) || !isset($_POST['passwordTwo']) || !isset($_POST['firstName']) || !isset($_POST['lastName'])){
+
+        //This will most commonly be triggered by verificatione mails.
         if(isset($_GET['email']) && isset($_GET['token'])){
+
+            //Load the HTML for presentation.
             require('registerUserPresentationPartOne.php');
 
+            //Check the Queue for the requested email.
             $entry = getQueueEntry($_GET['email']);
 
             //If we've never heard of the email, redirect them.
             if(sizeof($entry) <= 0) {
                 echo "<p>We're not sure how you got here. 
                 <a href=\"../login.php\">Perhapse you wish to register for an account?</a></p>";
-            } else {
+            } else { //Now we check the email and token against the queue.
                 if(strcmp($_GET['email'], $entry[0]['email']) == 0 &&
                     strcmp($_GET['token'], $entry[0]['token']) == 0){
+                    //Go ahead and attempt activation because everything checks out.
                     if(activateUserInQueue($_GET['email'])) {
                         echo "<h3>Email Activated!</h3>
                         <p>Please go to <a href=\"../login.php\">the login page.</a> To start spotting!";
-                    } else {
+                    } else { //This should only happen when a GET request tries to falsify a user token.
                         echo "<h3>Oops. Something went wrong.</h3>
                         <p>Please head over to <a href=\"../login.php\">the login page</a> and re-registering!";
                     }
+                //Feedback for corrupted links or malicious requests.
                 } else {
                     echo "<h3>Error: Email+Token pairs do not match</h3>
                     <p>Please try <a href=\"../login.php\">registering again</a></p>";
                 }
             }
+
+            //Load the bottom half of the html page for user presentation.
             require('registerUserPresentationPartTwo.php');
-        } else {
+        } else { //This is the catch-all for weird POST requests. The bot and hacker branch.
             echo '0';
         }
     } else if (isset($_POST['test'])){ //If we are running tests.
 
-        $results = verifyUserDetails($_POST['email'], $_POST['passwordOne'], $_POST['passwordTwo'], 
-                                        $_POST['firstName'], $_POST['lastName'], $_POST['token']);
+        //We make sure the test data are set.
+        if(isset($_POST['email']) && isset($_POST['passwordOne']) && isset($_POST['passwordTwo']) && 
+            isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['token']))
+        {
+            $results = verifyUserDetails($_POST['email'], $_POST['passwordOne'], $_POST['passwordTwo'], 
+                                            $_POST['firstName'], $_POST['lastName'], $_POST['token']);
+        } else { //This is invoked when something is not set in a test POST. (usually invoked by mistaken developer calls.)
+            $results = false;
+        }
+
+        //Echo results.
         if($results == false){
             echo '0';
         } else if ($results == true){

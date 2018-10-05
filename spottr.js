@@ -68,7 +68,7 @@ app.controller('spottrCntrl', function($scope, $http) {
 		}).then(function successCallback(response) {
 			// this callback will be called asynchronously
 			// when the response is available
-            console.log(response.data)
+            //console.log(response.data)
             response.data.forEach(function(element) {
             	$scope.picturePaths.push(element['path']);
             });
@@ -99,7 +99,7 @@ $('document').ready(function () {
 				},
 				dataType: "text",
 				success: function(response) {
-					console.log(response);
+					//console.log(response);
 					$('#locSave').button('reset');
 					$('#newLocationModal').modal('toggle');
 					location.reload();
@@ -107,14 +107,66 @@ $('document').ready(function () {
 			});
 		}
 	});
+
+	$('#img_upld').on('click', function(){
+
+
+			$.ajax({
+				url: "etc/db_interface.php",
+				type: "post",
+				data: {
+					key: 'B52C106C63CB00C850584523FB0EC12',
+					action: 'select',
+					table: 'Location',
+					columns: ['location_id','loc_name'],
+				},
+				dataType: "text",
+				success: function(response) {
+					var resp = JSON.parse(response);
+
+					var sel = $('#img_upload_loc');
+
+					for(i in resp){
+						jQuery('<option/>', {
+							value: resp[i]['location_id'],
+							html: resp[i]['loc_name']
+						}).appendTo(sel);
+					}
+				}
+			});
+	});
 });
 
+//AJAX code to upload image
+$(document).ready(function(){
+  $('#upload').on('click', function(){
 
+    var fd = new FormData();
+    var files = $('#file')[0].files[0];
+    fd.append('file',files);
+    fd.append('location_id',$('#img_upload_loc').val())
+
+    // AJAX request
+    $.ajax({
+      url: 'upload.php',
+      //url: 'scratch.php',
+      type: 'post',
+      data: fd,
+      contentType: false,
+      processData: false,
+      success: function(response){
+      	console.log(response);
+        alert('Image Successfully Uploaded!');
+		location.reload();
+      }
+    });
+  });
+});
 
 
 function addMapMarkers(locations){
 
-    console.log(locations)
+    //console.log(locations)
     var avgLat = 0;
     var avgLong = 0;
     for (i = 0; i < locations.length; i++){
@@ -124,8 +176,8 @@ function addMapMarkers(locations){
 
     avgLat = avgLat/locations.length;
     avgLong = avgLong/locations.length;
-    console.log(avgLat);
-    console.log(avgLong);
+    //console.log(avgLat);
+    //console.log(avgLong);
 
     var map = new google.maps.Map(
         //document.getElementById('map'), {zoom: 10, center: new google.maps.LatLng(37.5949, -120.9577)});

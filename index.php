@@ -154,9 +154,10 @@
 <!-- CLIENT STARTS HERE -->
                             <div id="map"></div>
                             <hr>
-                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">
-                              Add New Location
-                            </button>
+							<div id="buttonSpace">
+                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">Add New Location</button>
+							<button type="button" id="img_upld" class="btn btn-info" data-toggle="modal" data-target="#uploadModal">Upload Image</button>
+							</div>
                         </div>
 
                         <!-- /.panel-body -->
@@ -218,7 +219,35 @@
       </div>
     </div>
 
+<!-- Upload Image Modal -->
+<div id="uploadModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Image Upload Form</h4>
+      </div>
+      <div class="modal-body">
+
+    
+
+        <!-- Form -->
+    
+        <form method='post' action='' enctype="multipart/form-data">
+            <select name="location_id" id="img_upload_loc">
+                <option>&nbsp;</option>
+            </select>   
+            <hr />
+          Select file : <input type='file' name='file' id='file' class='form-control' ><br>
+          <input type='button' class='btn btn-info' value='Upload' id='upload'>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Upload Image Modal -->
 
     <!-- AngularJS -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
