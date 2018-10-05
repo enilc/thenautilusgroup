@@ -220,6 +220,35 @@
     </div>
 
 <!-- Upload Image Modal -->
+<div id="mapMarkerModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Photos at <span id="currentLocationName"></span></h4>
+      </div>
+      <div class="modal-body">
+        <div class="well">
+            This is where the photos go.
+        </div>
+
+        <!-- Form -->
+        <hr />
+        <h3>Do you have a photo at this spot? Add it below!</h3>
+        <form method='post' action='' enctype="multipart/form-data">
+            <span id='currentLocationID' style="display:none"></span>
+          Select file : <input type='file' name='file' id='file' class='form-control' ><br>
+          <input type='button' class='btn btn-info' value='Upload' id='uploadLoc'>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Upload Image Modal -->
+
+<!-- Upload Image Modal -->
 <div id="uploadModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -230,9 +259,6 @@
         <h4 class="modal-title">Image Upload Form</h4>
       </div>
       <div class="modal-body">
-
-    
-
         <!-- Form -->
     
         <form method='post' action='' enctype="multipart/form-data">
