@@ -31,7 +31,7 @@
 	function getFileExtension($path){ //This gets the file extension, returns '' if not allowed.
 		$extension = pathinfo($path,PATHINFO_EXTENSION);
 		$allowable = array('jpg','jpeg','png','gif','bmp');
-
+		echo '\n extension: ' . $extension;
 		if(array_search($extension, $allowable) !== False){
 			return $extension;
 		} else {
@@ -72,9 +72,9 @@
 	// $keyName = $_POST['location_id'] . basename($_FILES["file"]['name']);
 	//$keyName = 'test_example/' . basename($_FILES["file"]['name']);
 
-	print_r($_FILES['file']);
+	print_r($_FILES);
 	$keyName = $_POST['location_id'] . '/' . scrambleFileName(basename($_FILES["file"]['name']));
-	//$keyName = scrambleFileName(basename($_FILES["file"]['name']));
+	echo 'keyname: ' . basename($_FILES["file"]['name']) . '       |';
 	// Add it to S3
 	$response = 0;
 	try {

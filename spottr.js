@@ -83,7 +83,7 @@ $('document').ready(function () {
 					key: 'B52C106C63CB00C850584523FB0EC12',
 					action: 'insert',
 					table: 'Location',
-					columns: ['location_id','loc_name','latitude', 'longitude'],
+					columns: ['loc_name','latitude', 'longitude'],
 					values: [$('#lgLocationName').val(),$('#lgLocationLat').val(),$('#lgLocationLong').val()]
 				},
 				dataType: "text",
@@ -156,6 +156,7 @@ $(document).ready(function(){
 
     var fd = new FormData();
     var files = $('#fileLoc')[0].files[0];
+    console.log($('#fileLoc'))
     fd.append('file',files);
     fd.append('location_id',$('#currentLocationID').html());
 
@@ -410,7 +411,7 @@ map = new google.maps.Map(document.getElementById('map'), {
                 var resp = JSON.parse(response);
                 
 
-                for(var i = 0; i < 3; i++){
+                for(var i = 0; i < 3 && i < resp.length; i++){
                   var dv = jQuery('<div/>', {
                     class: ((i < 2) ? 'col-sm-12 col-md-4' : 'hidden-sm hidden-xs col-md-4')
                   }).appendTo($('#pictureWell'));
