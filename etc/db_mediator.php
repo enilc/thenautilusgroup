@@ -90,10 +90,10 @@
 
                     //Since we know our column name is save, add directly to the SQL key.
                     //Also add placemarker or filter value.
-                    $sql .= ($filterFirst ? '' : ' AND ') . $key . ' = :val' . $count;
+                    $sql .= ($filterFirst ? '' : ' AND ') . $value[0] . ' = :val' . $count;
 
                     //Add filter value for PDO execute()
-                    $queryDetails[':val' . $count] = $value;
+                    $queryDetails[':val' . $count] = $value[1];
 
                     //Handle formatting
                     $filterFirst = false;
@@ -104,6 +104,10 @@
             $stmt = $dbConn -> prepare($sql);
             try {
                 //Execute our query.
+               /* if(isset($_POST['filter']) && $_POST['filter'][0][0] == 'location'){
+                    print_r($queryDetails);
+                    echo $sql . '<br /><br />';
+                }*/
                 $status = $stmt->execute($queryDetails);
                 if($status){
 

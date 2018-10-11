@@ -48,8 +48,8 @@
 	use Aws\S3\Exception\S3Exception;
 	// AWS Info
 	$bucketName = 'spottrimages';
-	$IAM_KEY = 'secret';  //remove before uploading to github
-	$IAM_SECRET = 'secret';  //remove before uploading to github
+	$IAM_KEY = '';  //remove before uploading to github
+	$IAM_SECRET = '';  //remove before uploading to github
 	// Connect to AWS
 	try {
 		$s3 = S3Client::factory(

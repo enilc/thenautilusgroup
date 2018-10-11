@@ -88,6 +88,10 @@
      .top-img {
       width: 100%;
      }
+
+     .well-img {
+      max-height: 300px;
+     }
     </style>
 
 </head>
@@ -269,17 +273,16 @@
         <h4 class="modal-title">Photos at <span id="currentLocationName"></span></h4>
       </div>
       <div class="modal-body">
-        <div class="well">
-            This is where the photos go.
-        </div>
+        <div class="row" id='pictureWell'>
 
-        <!-- Form -->
+        </div>
         <hr />
         <h3>Do you have a photo at this spot? Add it below!</h3>
         <form method='post' action='' enctype="multipart/form-data">
             <span id='currentLocationID' style="display:none"></span>
           Select file : <input type='file' name='file' id='fileLoc' class='form-control' ><br>
           <input type='button' class='btn btn-info' value='Upload' id='uploadLoc'>
+          <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>
@@ -307,6 +310,7 @@
             <hr />
           Select file : <input type='file' name='file' id='file' class='form-control' ><br>
           <input type='button' class='btn btn-info' value='Upload' id='upload'>
+          <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
         </form>
       </div>
     </div>

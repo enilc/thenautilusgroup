@@ -1,7 +1,6 @@
 /**********************************************************************
 spot.tr primary javascript. 
 
-Note (8/2/18)
 
 
 /**********************************************************************/
@@ -76,9 +75,7 @@ $('document').ready(function () {
 		if($('#lgLocationName').val() !== "" && $('#lgLocationLat').val() !== "" && $('#lgLocationLong').val() !== ""){
 			var $this = $(this);
 			$this.button('loading');
-			/*	    setTimeout(function() {
-			$this.button('reset');
-			}, 8000);*/
+
 			$.ajax({
 				url: "etc/db_interface.php",
 				type: "post",
@@ -165,7 +162,6 @@ $(document).ready(function(){
     // AJAX request
     $.ajax({
       url: 'upload.php',
-      //url: 'scratch.php',
       type: 'post',
       data: fd,
       contentType: false,
@@ -182,7 +178,6 @@ $(document).ready(function(){
 
 function addMapMarkers(locations){
 
-    //console.log(locations)
     var avgLat = 0;
     var avgLong = 0;
     for (i = 0; i < locations.length; i++){
@@ -192,8 +187,7 @@ function addMapMarkers(locations){
 
     avgLat = avgLat/locations.length;
     avgLong = avgLong/locations.length;
-    //console.log(avgLat);
-    //console.log(avgLong);
+
 
 map = new google.maps.Map(document.getElementById('map'), {
           center: new google.maps.LatLng(avgLat, avgLong), // center of US (Lebanon, KS)
@@ -379,30 +373,8 @@ map = new google.maps.Map(document.getElementById('map'), {
           ]  
         });
 
-    /*var map = new google.maps.Map(
-        //document.getElementById('map'), {zoom: 10, center: new google.maps.LatLng(37.5949, -120.9577)});
-        document.getElementById('map'), {zoom: 10, center: new google.maps.LatLng(avgLat, avgLong)});*/
 
     var marker, i;
-/*
-    for (i = 0; i < locations.length; i++) {  
-
-        marker = new google.maps.Marker({
-            position: new google.maps.LatLng(parseFloat(locations[i]['latitude']), parseFloat(locations[i]['longitude'])),
-            map: map
-            });
-
-        var infowindow = new google.maps.InfoWindow({
-              content: 'test info'
-            });
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-                infowindow.setContent(locations[i][0]);
-                infowindow.open(map, marker);
-                }
-            })(marker, i));
-    }*/
-
     console.log(locations);
 
 	for (i = 0; i < locations.length; i++) {  
@@ -420,7 +392,39 @@ map = new google.maps.Map(document.getElementById('map'), {
 
 	         	$('#currentLocationID').html(id);
 	         	$('#currentLocationName').html(nm);
-	          	$("#mapMarkerModal").modal('show');
+            //Clear the picture preview
+            $('#pictureWell').html('');
+            $.ajax({
+              url: "etc/db_interface.php",
+              type: "post",
+              data: {
+                key: 'B52C106C63CB00C850584523FB0EC12',
+                action: 'select',
+                table: 'Photo',
+                columns: ['path'],
+                filter: [['location',id]]
+              },
+              dataType: "text",
+              success: function(response) {
+                console.log(response);
+                var resp = JSON.parse(response);
+                
+
+                for(var i = 0; i < 3; i++){
+                  var dv = jQuery('<div/>', {
+                    class: ((i < 2) ? 'col-sm-12 col-md-4' : 'hidden-sm hidden-xs col-md-4')
+                  }).appendTo($('#pictureWell'));
+                  
+                  jQuery('<img/>', {
+                    src: resp[i]['path'],
+                    class: 'img-rounded well-img img-thumbnail marker-img'
+                  }).appendTo(dv);
+                }
+              }
+            });
+
+
+	          $("#mapMarkerModal").modal('show');
 	         }
 	    })(marker, i));
 	}
