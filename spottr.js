@@ -83,7 +83,7 @@ $('document').ready(function () {
 					key: 'B52C106C63CB00C850584523FB0EC12',
 					action: 'insert',
 					table: 'Location',
-					columns: ['loc_name','latitude', 'longitude'],
+					columns: ['location_id','loc_name','latitude', 'longitude'],
 					values: [$('#lgLocationName').val(),$('#lgLocationLat').val(),$('#lgLocationLong').val()]
 				},
 				dataType: "text",
@@ -156,7 +156,6 @@ $(document).ready(function(){
 
     var fd = new FormData();
     var files = $('#fileLoc')[0].files[0];
-    console.log($('#fileLoc'))
     fd.append('file',files);
     fd.append('location_id',$('#currentLocationID').html());
 
@@ -176,6 +175,38 @@ $(document).ready(function(){
   });
 });
 
+//code to add user's current location to Add New Location modal form
+$('document').ready(function () {
+	$('#addCurrentLocation').on('click', function() {	
+		
+		navigator.geolocation.getCurrentPosition(function(position) {
+			alert("This works!");
+			$('input[name="lgLocationLat"]').val(position.coords.latitude);
+			$('input[name="lgLocationLong"]').val(position.coords.longitude);
+		});
+		
+		//alert("on click works");
+		//var startPos;
+		
+		//var //showPosition = function(position) {
+			//startPos = position;
+			//alert("show position works");
+			//$('input[name="lgLocationLat"]').val(startPos.coords.latitude);
+			//$('input[name="lgLocationLong"]').val(startPos.coords.longitude);
+		//};
+		
+		//navigator.geolocation.getCurrentPosition(showPosition);
+		//alert("geolocation works");
+		
+		
+		//THIS WAS CODE THAT WORKED OFF INTERNET IP
+		//var userLat = geoplugin_latitude();
+		//var userLong = geoplugin_longitude();
+		//$('input[name="lgLocationLat"]').val(userLat);
+		//$('input[name="lgLocationLong"]').val(userLong);
+		
+	});
+});
 
 function addMapMarkers(locations){
 
@@ -411,7 +442,7 @@ map = new google.maps.Map(document.getElementById('map'), {
                 var resp = JSON.parse(response);
                 
 
-                for(var i = 0; i < 3 && i < resp.length; i++){
+                for(var i = 0; i < 3; i++){
                   var dv = jQuery('<div/>', {
                     class: ((i < 2) ? 'col-sm-12 col-md-4' : 'hidden-sm hidden-xs col-md-4')
                   }).appendTo($('#pictureWell'));

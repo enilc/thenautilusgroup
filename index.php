@@ -12,11 +12,6 @@
     } 
  
 ?>
-    
-<?php 
-//require_once('etc/db_connect.php');
-
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,9 +22,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
 <!-- primary spot.tr javascript file. -->
-
 <script src="spottr.js"></script>
-
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,7 +43,7 @@
 	<meta name="msapplication-TileImage" content="images/icons/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#2F3BA2">
 
-    <title>DB Interface Test</title>
+    <title>Spot.tr</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -196,8 +189,8 @@
                             <div id="map"></div>
                             <hr>
 							<div id="buttonSpace">
-                            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">Add New Location</button>
-							<button type="button" id="img_upld" class="btn btn-info" data-toggle="modal" data-target="#uploadModal">Upload Image</button>
+                            <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#newLocationModal">Add New Location</button>
+							<button type="button" id="img_upld" class="btn btn-success" data-toggle="modal" data-target="#uploadModal">Upload Image</button>
 							</div>
                         </div>
 
@@ -237,26 +230,27 @@
                 <div class="form-group row">
                   <label for="lgLocationName" class="col-sm-2 col-form-label col-form-label-lg">Location</label>
                   <div class="col-sm-10">
-                    <input type="text" ng-model="locFormName" class="form-control form-control-lg" id="lgLocationName" placeholder="Taj Mahal">
+                    <input type="text" ng-model="locFormName" class="form-control form-control-lg" id="lgLocationName" placeholder="Type New Location Name Here">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="lgLocationLat" class="col-sm-2 col-form-label col-form-label-lg">Latitude</label>
                   <div class="col-sm-10">
-                    <input type="number" ng-model="locFormLat" class="form-control form-control-lg" id="lgLocationLat" placeholder="37.63968970">
+                    <input type="number" ng-model="locFormLat" class="form-control form-control-lg" name="lgLocationLat" id="lgLocationLat">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="lgLocationLong" class="col-sm-2 col-form-label col-form-label-lg">Longitude</label>
                   <div class="col-sm-10">
-                    <input type="number" ng-model="locFormLong" class="form-control form-control-lg" id="lgLocationLong" placeholder="-120.99970480">
+                    <input type="number" ng-model="locFormLong" class="form-control form-control-lg" name="lgLocationLong" id="lgLocationLong">
                   </div>
                 </div>
               </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" id="locSave" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order" class="btn btn-primary">Add Location</button>
+            <button type="button" id="locSave" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order" class="btn btn-success">Add Location</button>
+			<button type="button" id="addCurrentLocation" class="btn btn-success">Add Current Coordinates</button>
+			<button type="button" class="btn btn-outline-success" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
