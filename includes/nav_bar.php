@@ -13,12 +13,34 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href=<?php echo "\"/index.php?sid=" . session_id() . "\"" ?>><i class="fa fa-home fa-fw"></i> Spotter Map</a>
+                        </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-database fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-user">
+
+                        <li>
+                            <a href=<?php echo "\"/tests/db_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Database</a>
+                        </li>
+                        <li>
+                            <a href=<?php echo "\"/tests/userAccountTests.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i>Test User Account Registration and Connectivity</a>
+                        </li>
+
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+
 
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
+
                     <ul class="dropdown-menu dropdown-user">
                         <!--<li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
@@ -27,6 +49,7 @@
                         <li class="divider"></li>-->
                         <li><a href=<?php echo "\"logout.php?sid=" . session_id() . "\"" ?>><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
+
                     </ul>
                     <!-- /.dropdown-user -->
                 </li>
@@ -48,15 +71,7 @@
                             </div>
                             <!-- /input-group 
                         </li>-->
-                        <li>
-                            <a href=<?php echo "\"/index.php?sid=" . session_id() . "\"" ?>><i class="fa fa-home fa-fw"></i> Spotter Map</a>
-                        </li>
-                        <li>
-                            <a href=<?php echo "\"/tests/db_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Database</a>
-                        </li>
-                        <li>
-                            <a href=<?php echo "\"/tests/userAccountTests.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i>Test User Account Registration and Connectivity</a>
-                        </li>
+
 
                     </ul>
                 </div>

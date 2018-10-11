@@ -48,8 +48,8 @@
 	use Aws\S3\Exception\S3Exception;
 	// AWS Info
 	$bucketName = 'spottrimages';
-	$IAM_KEY = 'ADD_KEY_HERE';  //remove before uploading to github
-	$IAM_SECRET = 'ADD_SECRET_HERE';  //remove before uploading to github
+	$IAM_KEY = 'secret';  //remove before uploading to github
+	$IAM_SECRET = 'secret';  //remove before uploading to github
 	// Connect to AWS
 	try {
 		$s3 = S3Client::factory(
@@ -72,8 +72,7 @@
 	// $keyName = $_POST['location_id'] . basename($_FILES["file"]['name']);
 	//$keyName = 'test_example/' . basename($_FILES["file"]['name']);
 
-	print_r($_POST['location_id']);
-
+	print_r($_FILES['file']);
 	$keyName = $_POST['location_id'] . '/' . scrambleFileName(basename($_FILES["file"]['name']));
 	//$keyName = scrambleFileName(basename($_FILES["file"]['name']));
 	// Add it to S3
@@ -81,6 +80,7 @@
 	try {
 		// Uploaded:
 		$file = $_FILES["file"]['tmp_name'];
+
 		$s3->putObject(
 			array(
 				'Bucket'=>$bucketName,

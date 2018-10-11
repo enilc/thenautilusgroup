@@ -84,6 +84,10 @@
        height: 600px;  /* The height is 400 pixels */
        width: 100%;  /* The width is the width of the web page */
       }
+
+     .top-img {
+      width: 100%;
+     }
     </style>
 
 </head>
@@ -106,37 +110,57 @@
 
         <div id="page-wrapper">
             <div class="row">
-                <div class="col-lg-12">
-                    <br />
+                <div class="hidden-sm hidden-xs col-lg-12">
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[0]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[1]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[2]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[3]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[4]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[5]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[6]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[7]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[8]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[9]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[10]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+                  <div class="col-md-1">
+                  <img src="{{picturePaths[11]}}" alt=".." class="img-rounded top-img img-thumbnail">
+                  </div>
+
+
+
                 </div>
                 <!-- /.col-lg-12 -->
+
+
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="col-lg-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-photo fa-fw"></i> Photos in this region
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
 
-                                <img src="{{picturePaths[0]}}" class="img-thumbnail" alt="Image1">
-                                <img src="{{picturePaths[1]}}" class="img-thumbnail" alt="Image1">
-                                <img src="{{picturePaths[2]}}" class="img-thumbnail" alt="Image1">
-                                <img src="{{picturePaths[3]}}" class="img-thumbnail" alt="Image1">
-                                <img src="{{picturePaths[4]}}" class="img-thumbnail" alt="Image1">
-
-                            <a href="#" class="btn btn-default btn-block">View All Alerts</a>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-
-                </div>
-                <!-- /.col-lg-4 -->
-
-                <div class="col-lg-10">
+                <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-map-marker fa-fw"></i>Spotted Locations
@@ -182,6 +206,8 @@
 
             </div>
             <!-- /.row -->
+
+        <div id="page-wrapper">
         </div>
         <!-- /#page-wrapper -->
 
@@ -252,7 +278,7 @@
         <h3>Do you have a photo at this spot? Add it below!</h3>
         <form method='post' action='' enctype="multipart/form-data">
             <span id='currentLocationID' style="display:none"></span>
-          Select file : <input type='file' name='file' id='file' class='form-control' ><br>
+          Select file : <input type='file' name='file' id='fileLoc' class='form-control' ><br>
           <input type='button' class='btn btn-info' value='Upload' id='uploadLoc'>
         </form>
       </div>

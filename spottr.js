@@ -60,7 +60,7 @@ app.controller('spottrCntrl', function($scope, $http) {
 		}).then(function successCallback(response) {
 			// this callback will be called asynchronously
 			// when the response is available
-            //console.log(response.data)
+            console.log(response.data)
             response.data.forEach(function(element) {
             	$scope.picturePaths.push(element['path']);
             });
@@ -137,6 +137,7 @@ $(document).ready(function(){
     var files = $('#file')[0].files[0];
     fd.append('file',files);
     fd.append('location_id',$('#img_upload_loc').val())
+    //TODO: Error without a location selected.
 
     // AJAX request
     $.ajax({
@@ -149,7 +150,7 @@ $(document).ready(function(){
       success: function(response){
       	console.log(response);
         alert('Image Successfully Uploaded!');
-		location.reload();
+		    location.reload();
       }
     });
   });
@@ -157,7 +158,7 @@ $(document).ready(function(){
    $('#uploadLoc').on('click', function(){
 
     var fd = new FormData();
-    var files = $('#file')[0].files[0];
+    var files = $('#fileLoc')[0].files[0];
     fd.append('file',files);
     fd.append('location_id',$('#currentLocationID').html());
 
