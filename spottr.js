@@ -73,9 +73,8 @@ app.controller('spottrCntrl', function($scope, $http) {
 $('document').ready(function () {
 	$('#locSave').on('click', function() {
 		if($('#lgLocationName').val() !== "" && $('#lgLocationLat').val() !== "" && $('#lgLocationLong').val() !== ""){
-			var $this = $(this);
-			$this.button('loading');
-
+			$('#locSave').button('loading');
+      console.log('what is going on with location adding?');
 			$.ajax({
 				url: "etc/db_interface.php",
 				type: "post",
@@ -83,12 +82,12 @@ $('document').ready(function () {
 					key: 'B52C106C63CB00C850584523FB0EC12',
 					action: 'insert',
 					table: 'Location',
-					columns: ['location_id','loc_name','latitude', 'longitude'],
+					columns: ['loc_name','latitude', 'longitude'],
 					values: [$('#lgLocationName').val(),$('#lgLocationLat').val(),$('#lgLocationLong').val()]
 				},
 				dataType: "text",
 				success: function(response) {
-					//console.log(response);
+					console.log(response);
 					$('#locSave').button('reset');
 					$('#newLocationModal').modal('toggle');
 					location.reload();
@@ -440,9 +439,8 @@ map = new google.maps.Map(document.getElementById('map'), {
               success: function(response) {
                 console.log(response);
                 var resp = JSON.parse(response);
-                
 
-                for(var i = 0; i < 3; i++){
+                for(var i = 0; i < 3 && i < resp.length; i++){
                   var dv = jQuery('<div/>', {
                     class: ((i < 2) ? 'col-sm-12 col-md-4' : 'hidden-sm hidden-xs col-md-4')
                   }).appendTo($('#pictureWell'));
