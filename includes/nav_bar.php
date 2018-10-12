@@ -7,22 +7,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">spottr</a>
-
+                <!--<a class="navbar-brand" href="index.php">spottr</a>-->
+                <a href="#" class="navbar-center" style="margin: 0; float: none; text-align:center"><img class="img-fluid " src="images/logo2.png" style="position: absolute; left: 50%; margin-left: -50px !important; display: block; height:50px;"></a>
             </div>
             <!-- /.navbar-header -->
 
+            <ul class="nav navbar-top-links navbar-left">
+                <li>
+                    <a href=<?php echo "\"/index.php?sid=" . session_id() . "\"" ?>><i class="fa fa-home fa-fw"></i> Spotter Map</a>
+                </li>
+            </ul>
             <ul class="nav navbar-top-links navbar-right">
-                        <li>
-                            <a href=<?php echo "\"/index.php?sid=" . session_id() . "\"" ?>><i class="fa fa-home fa-fw"></i> Spotter Map</a>
-                        </li>
+
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-database fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
 
                     <ul class="dropdown-menu dropdown-user">
-
+                        test
                         <li>
                             <a href=<?php echo "\"/tests/db_test.php?sid=" . session_id() . "\"" ?>><i class="fa fa-database fa-fw"></i> Test Database</a>
                         </li>

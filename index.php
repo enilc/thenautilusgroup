@@ -85,6 +85,18 @@
      .well-img {
       max-height: 300px;
      }
+
+     .mr-5 {
+      margin-right: 5px;
+     }
+
+     .mt-5 {
+      margin-top: 5px;
+     }
+
+     .logo-img {
+      width: 100%;
+     }
     </style>
 
 </head>
@@ -106,8 +118,50 @@
         ?>
 
         <div id="page-wrapper">
+
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="panel panel-default mt-5">
+                        <div class="panel-heading">
+                            <i class="fa fa-map-marker fa-fw"></i>Spotted Locations
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-xs btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">Add New Location</button>
+
+                                  <button type="button" id="img_upld" class="btn btn-xs btn-primary mr-5" data-toggle="modal" data-target="#uploadModal">Upload Image</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+
+<!-- THIS WOULD SERVE AS THE CLIENT AS IT DISPLAYS THE OUTPUT FROM BOTH THE BUSINESS OBJECT AND TRANSFER OBJECT COMBINED -->
+<!-- CLIENT STARTS HERE -->
+                            <div id="map"></div>
+                            <hr>
+
+                        </div>
+
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+
+                </div>
+                <!-- /.col-lg-8 -->
+
+            </div>
+            <!-- /.row -->
             <div class="row">
                 <div class="hidden-sm hidden-xs col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-map-marker fa-fw"></i>User Photos
+
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                          
                   <div class="col-md-1">
                   <img src="{{picturePaths[0]}}" alt=".." class="img-rounded top-img img-thumbnail">
                   </div>
@@ -146,6 +200,13 @@
                   <div class="col-md-1">
                   <img src="{{picturePaths[11]}}" alt=".." class="img-rounded top-img img-thumbnail">
                   </div>
+                        </div>
+
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+
+
 
 
 
@@ -154,56 +215,6 @@
 
 
             </div>
-            <!-- /.row -->
-            <div class="row">
-
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-map-marker fa-fw"></i>Spotted Locations
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-
-<!-- THIS WOULD SERVE AS THE CLIENT AS IT DISPLAYS THE OUTPUT FROM BOTH THE BUSINESS OBJECT AND TRANSFER OBJECT COMBINED -->
-<!-- CLIENT STARTS HERE -->
-                            <div id="map"></div>
-                            <hr>
-							<div id="buttonSpace">
-                            <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#newLocationModal">Add New Location</button>
-							<button type="button" id="img_upld" class="btn btn-success" data-toggle="modal" data-target="#uploadModal">Upload Image</button>
-							</div>
-                        </div>
-
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-
-                </div>
-                <!-- /.col-lg-8 -->
-
-            </div>
-            <!-- /.row -->
-
         <div id="page-wrapper">
         </div>
         <!-- /#page-wrapper -->
