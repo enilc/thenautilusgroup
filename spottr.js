@@ -392,6 +392,7 @@ map = new google.maps.Map(document.getElementById('map'), {
           //For alpha, just centering on Modesto. Need to get a default location from users...gonna have to figure this out later.
           center: new google.maps.LatLng(pos['lat'], pos['long']),
           zoom: 9,
+          fullscreenControl: false,
           //****JSON Object to draw the map, green road color is the same as the logo #1D935F *****/
           styles: MAP_STYLE
         });
