@@ -127,9 +127,9 @@
                             <i class="fa fa-map-marker fa-fw"></i>Spotted Locations
                             <div class="pull-right">
                                 <div class="btn-group">
-                                  <button type="button" class="btn btn-xs btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">Add New Location</button>
+                                  <button type="button" id="addLocBtn" class="btn btn-xs btn-primary pull-right" data-toggle="modal" data-target="#newLocationModal">Add Location</button>
 
-                                  <button type="button" id="img_upld" class="btn btn-xs btn-primary mr-5" data-toggle="modal" data-target="#uploadModal">Upload Image</button>
+                                  <button type="button" id="img_upld" class="btn btn-xs btn-primary mr-5" data-toggle="modal" data-target="#uploadModal">Add Image</button>
                                 </div>
                             </div>
                         </div>

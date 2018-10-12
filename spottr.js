@@ -238,7 +238,7 @@ app.controller('spottrCntrl', function($scope, $http) {
 		}).then(function successCallback(response) {
 			// this callback will be called asynchronously
 			// when the response is available
-            console.log(response.data)
+            shuffle(response.data);
             response.data.forEach(function(element) {
             	$scope.picturePaths.push(element['path']);
             });
@@ -302,6 +302,12 @@ $('document').ready(function () {
 				}
 			});
 	});
+
+  $('#addLocBtn').on('click',function () {
+      $('#lgLocationLat').val('');
+      $('#lgLocationLong').val('');
+      $('#newLocationModal').show();
+  });
 });
 
 //AJAX code to upload image
@@ -394,7 +400,7 @@ map = new google.maps.Map(document.getElementById('map'), {
       $("#newLocationModal").modal('show');
       $('#lgLocationLat').val(event.latLng.lat());
       $('#lgLocationLong').val(event.latLng.lng());
-      //alert( "Latitude: "+event.latLng.lat()+" "+", longitude: "+event.latLng.lng() ); 
+      
     });
 
 
@@ -432,7 +438,7 @@ map = new google.maps.Map(document.getElementById('map'), {
               success: function(response) {
                 console.log(response);
                 var resp = JSON.parse(response);
-
+                shuffle(resp);
                 for(var i = 0; i < 3 && i < resp.length; i++){
                   var dv = jQuery('<div/>', {
                     class: ((i < 2) ? 'col-sm-12 col-md-4' : 'hidden-sm hidden-xs col-md-4')
@@ -453,4 +459,16 @@ map = new google.maps.Map(document.getElementById('map'), {
 	}
 
 
+}
+
+//Credit: https://stackoverflow.com/a/6274381
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
 }
