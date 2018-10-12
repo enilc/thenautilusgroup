@@ -353,61 +353,60 @@ $(document).ready(function(){
   });
 });
 
-//code to add user's current location to Add New Location modal form
-$('document').ready(function () {
-	$('#addCurrentLocation').on('click', function() {	
-		
-		navigator.geolocation.getCurrentPosition(function(position) {
-			alert("This works!");
-			$('input[name="lgLocationLat"]').val(position.coords.latitude);
-			$('input[name="lgLocationLong"]').val(position.coords.longitude);
-		});
-		
-		//alert("on click works");
-		//var startPos;
-		
-		//var //showPosition = function(position) {
-			//startPos = position;
-			//alert("show position works");
-			//$('input[name="lgLocationLat"]').val(startPos.coords.latitude);
-			//$('input[name="lgLocationLong"]').val(startPos.coords.longitude);
-		//};
-		
-		//navigator.geolocation.getCurrentPosition(showPosition);
-		//alert("geolocation works");
-		
-		
-		//THIS WAS CODE THAT WORKED OFF INTERNET IP
-		//var userLat = geoplugin_latitude();
-		//var userLong = geoplugin_longitude();
-		//$('input[name="lgLocationLat"]').val(userLat);
-		//$('input[name="lgLocationLong"]').val(userLong);
-		
-	});
-});
+
+function handleLocationError(flag,center){
+  return
+}
 
 function addMapMarkers(locations){
+    var pos = {
+      lat: 37.63419900, 
+      long: -120.98063900
+    }
 
+    //When we switch to HTTPS...this will auto-center.
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        console.log(position);
+        pos = {
+          lat: position.coords.latitude,
+          long: position.coords.longitude
+          };
+    
+      }, function() {
+    handleLocationError(true, map.getCenter());
+    });
+    } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, map.getCenter());
+    }
 
 
 map = new google.maps.Map(document.getElementById('map'), {
           //For alpha, just centering on Modesto. Need to get a default location from users...gonna have to figure this out later.
-          center: new google.maps.LatLng(37.63419900, -120.98063900),
+          center: new google.maps.LatLng(pos['lat'], pos['long']),
           zoom: 9,
           //****JSON Object to draw the map, green road color is the same as the logo #1D935F *****/
           styles: MAP_STYLE
         });
 
+    google.maps.event.addListener(map, 'click', function( event ){ 
+      $("#newLocationModal").modal('show');
+      $('#lgLocationLat').val(event.latLng.lat());
+      $('#lgLocationLong').val(event.latLng.lng());
+      //alert( "Latitude: "+event.latLng.lat()+" "+", longitude: "+event.latLng.lng() ); 
+    });
+
 
     var marker, i;
-    console.log(locations);
 
-	for (i = 0; i < locations.length; i++) {  
-	    marker = new google.maps.Marker({
-	         position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-	         icon: MAP_MARKER_IMG,
-	         map: map
-	    });
+  for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+           position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+           icon: MAP_MARKER_IMG,
+           map: map
+      });
+
 
 	    google.maps.event.addListener(marker, 'click', (function(marker, i) {
 	    	 var nm = locations[i]['loc_name'];
@@ -452,5 +451,6 @@ map = new google.maps.Map(document.getElementById('map'), {
 	         }
 	    })(marker, i));
 	}
+
 
 }

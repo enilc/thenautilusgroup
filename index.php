@@ -260,7 +260,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" id="locSave" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Processing Order" class="btn btn-success">Add Location</button>
-			<button type="button" id="addCurrentLocation" class="btn btn-success">Add Current Coordinates</button>
+			
 			<button type="button" class="btn btn-outline-success" data-dismiss="modal">Close</button>
           </div>
         </div>
@@ -346,5 +346,7 @@
 
 
 </body>
+
+
 
 </html>
