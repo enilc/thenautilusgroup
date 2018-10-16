@@ -1,5 +1,11 @@
 <?php
+/***************************AWS Upload Loader File********************
+    This file was not created by the Nautilus group and is part of
+files used for Aws interaction. Please view the readme in this folder
+for full details
 
+--Caleb
+*********************************************************************/
 $mapping = array(
     'GuzzleHttp\Pool' => __DIR__ . '/GuzzleHttp/Pool.php',
     'GuzzleHttp\UriTemplate' => __DIR__ . '/GuzzleHttp/UriTemplate.php',

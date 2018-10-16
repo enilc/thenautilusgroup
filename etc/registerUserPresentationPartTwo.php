@@ -1,3 +1,5 @@
+<!-- This is a file section used for user registration page presentation -->
+
                        </div>
                 </div>
             </div>

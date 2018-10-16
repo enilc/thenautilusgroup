@@ -3,12 +3,25 @@
 	This page facilitates upload to Amazon's S3 Bucket
 	Storage system.
 
+	POST formatting:
+
+	$_POST['location_id'] --> the numeric id of the location
+		where the photo was taken
+
+	Note: $_POST['email'] will be required when user photo
+		tracking is implemented.
+
+	$_FILES['file']['name'] --> original file name
+	$_FILES['file']['tmp_name'] --> location of file on server
+
+
+
 /***********************************************************/
 
 /**********REQUIRED FILES*******************************/
 	require 'aws-autoloader.php';
-	require 'etc/user_funct.php';
-	include 'etc/db_mediator.php';
+	require 'user_funct.php';
+	include 'db_mediator.php';
 
 	use Aws\S3\S3Client;
 	use Aws\S3\Exception\S3Exception;
@@ -21,17 +34,20 @@
 
 /*********Global Variables****************************/
 
-	$GLOBALS['BUCKET_URL'] = 'https://s3-us-west-1.amazonaws.com/spottrimages/';
 	// AWS Info
+	$GLOBALS['BUCKET_URL'] = 'https://s3-us-west-1.amazonaws.com/spottrimages/';
 	$GLOBALS['BUCKET_NAME'] = 'spottrimages';
 	$GLOBALS['IAM_KEY'] = '';  //remove before uploading to github
 	$GLOBALS['IAM_SECRET'] = '';  //remove before uploading to github
 
 
+	//File extensions we allow
+	$GLOBALS['allowable'] = array('jpg','jpeg','png','gif','bmp');
 /*********Member Functions****************************/
 
 
 
+	//Adds photo entery to the database in a secure way
 	function addImageToDB($path, $loc, $usr, $date_taken = NULL, $date_added = NULL){
 		$dbInt = new Mediator;
 		$dbInt -> dbInsert('Photo', array('photo_id','path', 'user_email', 'location', 'date_taken', 'date_added'),
@@ -41,7 +57,8 @@
 
 
 
-
+	//Makes a token from a path, seeded with a semi-random string, all of which is hashed.
+	//Original Credit: https://stackoverflow.com/a/4145848
 	function makeToken($path, $bits = 256) {
 	    $bytes = ceil($bits / 8);
 	    $randomString = '';
@@ -52,28 +69,25 @@
 	}
 
 	function getFileExtension($path){ //This gets the file extension, returns '' if not allowed.
+		
 		$extension = pathinfo($path,PATHINFO_EXTENSION);
-		$allowable = array('jpg','jpeg','png','gif','bmp');
-		if(array_search(strtolower($extension), $allowable) !== False){
+
+		//Return the extension if it's in the list of allowable extensions
+		if(array_search(strtolower($extension), $GLOBALS['allowable']) !== False){
 			return strtolower($extension);
 		} else {
 			return '';
 		}
 	}
 
+	//This function creates a hashed filename for an allowed file type.
 	function scrambleFileName($path){
-		echo '\n scramble path: ' . $path;
-		echo '\n extension: ' . getFileExtension($path);
-		echo '\n example token: ' . makeToken($path);
-		echo '\n conditional: ' . !empty(getFileExtension($path)); 
 		return (!empty(getFileExtension($path))) ? makeToken($path) . '.' . getFileExtension($path) : ''; 
 	}
 
 
 	function uploadImageToS3()
 	{
-
-
 		// Connect to AWS
 		try {
 			$s3 = S3Client::factory(
@@ -92,18 +106,20 @@
 			die("Error: " . $e->getMessage());
 		}
 		
-		// Generates a unqiue random string for the key name.
-		// $keyName = $_POST['location_id'] . basename($_FILES["file"]['name']);
-		//$keyName = 'test_example/' . basename($_FILES["file"]['name']);
 
-		//This is Present Caleb being a bro to Future Caleb. That guy has enough problems.
+		//Return an error to AJAX if the request was poorly formatted.
 		if(empty(getFileExtension($_FILES['file']['name']))){
+
+			//Add error
 	        header('HTTP/1.1 500 File Upload Error');
 	        header('Content-Type: application/json; charset=UTF-8');
 	        die(json_encode(array('message' => 'ERROR: Improper File Extension', 'code' => 999)));
-	        exit(0);
+
+	        //Kill execution
+	        exit(1);
 		}
 
+		// creates a file with the following path/name: /<location_id>/<hash_name>.<original_extension>
 		$keyName = $_POST['location_id'] . '/' . scrambleFileName(basename($_FILES["file"]['name']));
 		
 		// Add it to S3
@@ -127,12 +143,13 @@
 		}
 
 
-
-		addImageToDB($keyName,$_POST['location_id'],'smerd@mailinator.com');
+		//Add the image to the database. User tagging of images is currently unimplemented.
+		addImageToDB($keyName,$_POST['location_id'],'caleb@caleballen.com');
 	}
 
+	
+	//the main function's primary purpose is to keep ne'er-do-wells from abusing the upload feature 
 	function main(){
-		//the main function's primary purpose is to keep ne'er-do-wells from abusing the upload feature 
 		
 		if($_SERVER['REQUEST_METHOD'] != 'POST'){ 
 			//Anyone not posting a webform will either be a bot or a developer performing testing
