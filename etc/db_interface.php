@@ -22,33 +22,15 @@
 
     Responses are printed as JSON format objects.
 
-    **************************************************************************
-
-    Mediator Object:
-
-    To interface with the MySQL database I've (Caleb Allen) used the Mediator
-    design pattern.
-
-    ___________________         _____________________         _________________
-    | Javascript POST |         | Mediator Class    |         | MySQL Database|
-    | to              | <-----> |-------------------| <-----> |---------------|
-    | db_interface.php|         | dbTestCleanup()   |         | User Data     |
-    |                 |         | dbSelect()        |         | Location Data |
-    -------------------         | dbInsert()        |         | Picture Data  |
-                                | userLogin()       |         -----------------
-                                | conTestHandler()  |
-                                | getColumnNames()  |
-                                | getTableNames()   |  
-                                ---------------------
     /**************************************************************************/
 
-    require_once('db_connect.php');
-    require_once('user_funct.php');
-    require_once('db_mediator.php');
+
+//Mediator is preferred database connection object.
+require_once('db_mediator.php');
 
 
 function postInterface($dbMed){
-    //Shim to use for interaction. Credit: https://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
+    //Shim to use for javascript. Credit: https://stackoverflow.com/questions/15485354/angular-http-post-to-php-and-undefined
     if ($_SERVER['REQUEST_METHOD'] == 'POST' && empty($_POST))
         $_POST = json_decode(file_get_contents('php://input'), true);
 
@@ -65,26 +47,26 @@ function postInterface($dbMed){
         //authenticate user
         $dbMed -> userLogin($_POST['email'],$_POST['password']);
     }
-    //This test makes sure that the 'key' can be used to access the page. Better than nothing, but not much.
+    //This test ensures that all post requests use a key. Step is only effective against web bots.
     else if ($_POST['key'] == 'B52C106C63CB00C850584523FB0EC12') { 
 
         switch (strtolower($_POST['action'])){
-            case 'key_test':
+            case 'key_test': //Just testing to see if we can get the interface to see the key posted
                 echo 'Key Test Passed';
                 break;
-            case 'insert':
+            case 'insert': //Insert data into the database
                 $dbMed -> dbInsert($_POST['table'], $_POST['columns'], $_POST['values']);
                 break;
-            case 'select':
+            case 'select': //Select data from the database
                 $dbMed -> dbSelect($_POST['table'],$_POST['columns'],(isset($_POST['filter']) ? $_POST['filter'] : NULL));
                 break;
-            case 'clean_test':
+            case 'clean_test': //Cleanup files used in the database testing page
                 $dbMed -> dbTestCleanup($_POST['filter']);
                 break;
-            case 'user_exist':
+            case 'user_exist': //Simple boolean check to see if a user exists in the User table.
                 $dbMed -> dbUserExist($_POST['email']);
                 break;
-            case 'verify_email':
+            case 'verify_email': //Move a potential user from the registration Queue to the User table.
                 $dbMed -> dbValidateEmail((isset($_POST['email']) ? $_POST['email'] : NULL),
                                             (isset($_POST['token']) ? $_POST['token'] : NULL));
                 break;
@@ -95,8 +77,10 @@ function postInterface($dbMed){
     }
 }
 
-
+//Create a database mediator
 $dbInterfaceMediator = new Mediator;
+
+//Execute POSTED request.
 postInterface($dbInterfaceMediator);
 
 ?>

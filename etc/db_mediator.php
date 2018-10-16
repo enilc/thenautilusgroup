@@ -19,6 +19,11 @@
                                 | getTableNames()   |  
                                 ---------------------
     /**************************************************************************/
+//Required for Connection to the MySQL database
+require_once('db_connect.php');
+
+//Required for certain user functions
+require_once('user_funct.php');
 
     class Mediator {
         //Function for deleting locations added during testing

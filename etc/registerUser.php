@@ -1,4 +1,18 @@
 <?php
+
+/****************************************************
+    This page started as a customized version of an
+    example page from the PHPMailer documentation.
+
+    It grew to handle all user registration, but we
+    have indicated the copied portion below.
+
+
+    Rolling our own user registration system was,
+    almost certainly, unwise. Nevertheless, here 
+    it is.
+****************************************************/
+
 require_once('db_connect.php');
 require_once('user_funct.php');
 
@@ -77,7 +91,7 @@ function makeToken($eml, $bits = 256) {
     for ($i = 0; $i < $bytes; $i++) {
         $randomString .= chr(mt_rand(0, 255));
     }
-    //return $randomString;
+
     return hash('sha'.$bits, $randomString . $eml);
 }
 
@@ -90,7 +104,9 @@ function isUserRegistered($email){
         echo 'ERROR: Unable to queury User database.';
     } else if ($stmt -> rowCount() > 0) {
         return true;
-    } 
+    }  else {
+        return false;
+    }
 }
 
 
@@ -112,8 +128,10 @@ function getQueueEntry($email){
     if(!$stmt -> execute(array(':email' => $email))){
         return array();
     } else if ($stmt -> rowCount() > 0) {
+        //Return entry from Queue
         return $stmt -> fetchAll();
     } else {
+        //Return empty array otherwise.
         return array();
     }
 }
@@ -177,6 +195,7 @@ function deleteUserFromQueue($email){
     $dbConn = connectToDatabase();
     $sql = "DELETE FROM spotter.Queue WHERE email = :email";
     $stmt = $dbConn -> prepare($sql);
+    //Report success/failure
     if(!$stmt -> execute(array(':email' => $email))){
         return false;
     } else {
@@ -184,7 +203,7 @@ function deleteUserFromQueue($email){
     }
 }
 
-//Messy funciton to prep a simple verification email body.
+//Prep the email body.
 function prepEmailBody($eml, $token){
     $path = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
@@ -214,9 +233,11 @@ function activateUserInQueue($email){
                 SELECT email, password, first_name, last_name, NOW() FROM spotter.Queue 
                 WHERE email = :email";
     $stmt = $dbConn -> prepare($sql);
+    //Try to activate user
     if(!$stmt -> execute(array(':email' => $email))){
         return false;
     } else {
+        //If the user has been activated, remove them from the Queue.
         return deleteUserFromQueue($email);
     }
 }
