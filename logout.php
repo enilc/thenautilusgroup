@@ -1,5 +1,6 @@
 <?php
 
+//This page merely closes the session and redirects the user to the login page.
 if(isset($_GET['sid'])){
 	session_id($_GET['sid']);
 	session_start();
