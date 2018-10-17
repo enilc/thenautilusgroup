@@ -71,6 +71,34 @@
      </script>
   	
       <style>
+
+        body {
+          font-family: "Century Gothic", "sans serif";
+        }
+        .btn-primary {
+            background-color: #0E1B1A;
+        }
+        .btn-primary:hover {
+            background-color: #1F9F5F;
+        }
+        .btn-primary:focus {
+            background-color: #0E1B1A;
+        }
+        .btn-success {
+            background-color: #1F9F5F;
+        }
+        .btn-success:hover {
+            background-color: #0E1B1A;
+        }
+
+        .btn-secondary {
+            background-color: #ACBDBA;
+            color: #0E1B1A;
+        }
+        .btn-secondary:hover {
+            background-color: #0E1B1A;
+            color: #f5f5f5;
+        }
         /* Set the size of the div element that contains the map */
        #map {
          height: 600px;  /* The height is 600 pixels */
@@ -165,7 +193,7 @@
 
                           <div class="panel-heading">
 
-                              <i class="fa fa-map-marker fa-fw"></i>User Photos
+                              <i class="fa fa-picture-o fa-fw"></i>User Photos
 
                           </div>
 
@@ -376,7 +404,7 @@
 
                 Select file : <input type='file' name='file' id='fileLoc' class='form-control' ><br>
 
-                <input type='button' class='btn btn-info' value='Upload' id='uploadLoc'>
+                <input type='button' class='btn btn-primary' value='Upload' id='uploadLoc'>
 
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
 
@@ -423,7 +451,7 @@
 
               Select file : <input type='file' name='file' id='file' class='form-control' ><br>
 
-              <input type='button' class='btn btn-info' value='Upload' id='upload'>
+              <input type='button' class='btn btn-primary' value='Upload' id='upload'>
 
               <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
 

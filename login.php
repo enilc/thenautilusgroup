@@ -61,6 +61,99 @@
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         <style>
+            /* Credit: https://codepen.io/P1N2O/pen/pyBNzX*/
+            body {
+                width: 100wh;
+                height: 90vh;
+                font-family: "Century Gothic", "sans serif";
+                background: linear-gradient(-45deg, #1F9F5F, #D0EADD, #F5F5F5, #1F9F5F);
+                background-size: 400% 400%;
+                -webkit-animation: Gradient 35s ease infinite;
+                -moz-animation: Gradient 35s ease infinite;
+                animation: Gradient 35s ease infinite;
+            }
+
+            @-webkit-keyframes Gradient {
+                0% {
+                    background-position: 0% 50%
+                }
+                50% {
+                    background-position: 100% 50%
+                }
+                100% {
+                    background-position: 0% 50%
+                }
+            }
+
+            @-moz-keyframes Gradient {
+                0% {
+                    background-position: 0% 50%
+                }
+                50% {
+                    background-position: 100% 50%
+                }
+                100% {
+                    background-position: 0% 50%
+                }
+            }
+
+            @keyframes Gradient {
+                0% {
+                    background-position: 0% 50%
+                }
+                50% {
+                    background-position: 100% 50%
+                }
+                100% {
+                    background-position: 0% 50%
+                }
+            }
+
+            h1,
+            h6 {
+                font-family: 'Open Sans';
+                font-weight: 300;
+                text-align: center;
+                position: absolute;
+                top: 45%;
+                right: 0;
+                left: 0;
+            }
+
+            /* End Credit */
+
+            .btn-primary {
+                background-color: #0E1B1A;
+            }
+            .btn-primary:hover {
+                background-color: #1F9F5F;
+            }
+            .btn-primary:focus {
+                background-color: #0E1B1A;
+            }
+            .btn-success {
+                background-color: #1F9F5F;
+            }
+            .btn-success:hover {
+                background-color: #0E1B1A;
+            }
+
+            .btn-secondary {
+                background-color: #ACBDBA;
+                color: #0E1B1A;
+            }
+            .btn-secondary:hover {
+                background-color: #0E1B1A;
+                color: #f5f5f5;
+            }
+            .modal-body {
+                color: #0E1B1A;
+            }
+            .spottr-logo {
+                width: 100%;
+                margin-bottom: -45px;
+                margin-top: 10px;
+            }
             /* This styling is for the spining loading icon */
             .glyphicon.fast-right-spinner {
                 -webkit-animation: glyphicon-spin-r 1s infinite linear;
@@ -97,6 +190,20 @@
     <body>
 
         <div class="container">
+ 
+            <div class="row">
+
+                <div class="col-sm-2 col-sm-offset-5 col-md-4 col-md-offset-4">
+
+                    <img src="images/logo2.png" class="img-fluid spottr-logo" alt="Spot.tr Logo">
+
+                </div> 
+
+                <!-- end .col-md-4 -->
+
+            </div>
+
+            <!-- End .row -->
 
             <div class="row">
 
